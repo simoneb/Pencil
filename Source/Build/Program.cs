@@ -1,14 +1,12 @@
 namespace Pencil.Build
 {
 	using System;
-	using System.CodeDom.Compiler;
-	using System.Collections.Generic;
-	using Pencil.IO;
+	using IO;
 	
 	public class Program
 	{
 		public const int Success = 0;
-		public const int Failiure = 1;
+		public const int Failure = 1;
 
 		readonly Logger output;
 		readonly Converter<string,IProject> compiler;
@@ -26,7 +24,7 @@ namespace Pencil.Build
 			project.Register<IExecutionEnvironment>(new ExecutionEnvironment(output.Target));
 			for(int i = 1; i < args.Length; ++i)
 				if(BuildTarget(project, args[i]) != Success)
-					return Failiure;			
+					return Failure;			
             output.Write("BUILD SUCCEEDED");
 			return Success;
 		}
@@ -49,7 +47,7 @@ namespace Pencil.Build
                 output.Write("BUILD FAILED - {0}", error.Message);
 				output.Write(error.StackTrace);
             }
-            return Failiure;
+            return Failure;
         }
 
 		public void ShowLogo()

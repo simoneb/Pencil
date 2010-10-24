@@ -16,7 +16,7 @@ namespace Pencil.Test.Build
         {
             var project = new ProjectStub();
             project.HasTargetHandler = x => false;
-            Assert.That(Program.BuildTarget(project, "Target"), Is.EqualTo(Program.Failiure));
+            Assert.That(Program.BuildTarget(project, "Target"), Is.EqualTo(Program.Failure));
         }
         [Test]
         public void BuildTarget_should_return_Success_if_valid_target_and_successful_build()
