@@ -4,3 +4,5 @@ Build
 *.userprefs
 *.user
 obj/
+bin/
+_ReSharper*/
