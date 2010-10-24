@@ -14,5 +14,6 @@ namespace Pencil.IO
 		IEnumerable<Path> GetFiles(Path root, string pattern);
 		IEnumerable<Path> GetFilesRecursive(Path root, string pattern);
 		DateTime GetLastWriteTime(Path path);
+        IEnumerable<Path> GetDirectories(Path root, string pattern);
     }
 }

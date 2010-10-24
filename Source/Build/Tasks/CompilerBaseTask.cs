@@ -1,8 +1,6 @@
 namespace Pencil.Build.Tasks
 {
-	using System;
-    using System.Text;
-    using Pencil.IO;
+    using IO;
 
     public abstract class CompilerBaseTask : ExecTaskBase
     {

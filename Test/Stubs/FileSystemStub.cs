@@ -2,8 +2,7 @@ namespace Pencil.Test.Stubs
 {
     using System;
 	using System.Collections.Generic;
-    using Pencil.Build;
-    using Pencil.IO;
+    using IO;
 
     public class FileSystemStub : IFileSystem
     {
@@ -15,6 +14,7 @@ namespace Pencil.Test.Stubs
         public Action3<Path, Path, bool> CopyFileHandler = (x,y,overwrite) => {};
 		public Action<Path> DeleteFileHandler = path => {};
 		public Func<Path,string,IEnumerable<Path>> GetFilesRecursiveHandler = (path, pattern) => new Path[0];
+		public Func<Path,string,IEnumerable<Path>> GetDirectoriesHandler = (path, pattern) => new Path[0];
 		public Converter<Path, DateTime> GetLastWriteTimeHandler = path => DateTime.Today;
 
         public void CreateDirectory(string path) { CreateDirectoryHandler(path); }
@@ -26,6 +26,6 @@ namespace Pencil.Test.Stubs
 		public IEnumerable<Path> GetFiles(Path root, string pattern){ return GetFilesRecursiveHandler(root, pattern); }
 		public IEnumerable<Path> GetFilesRecursive(Path root, string pattern){ return GetFilesRecursiveHandler(root, pattern); }
     	public DateTime GetLastWriteTime(Path path){ return GetLastWriteTimeHandler(path); }
-
+        public IEnumerable<Path> GetDirectories(Path root, string pattern) { return GetDirectoriesHandler(root, pattern); }
     }
 }

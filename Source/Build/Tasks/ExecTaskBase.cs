@@ -1,13 +1,12 @@
 namespace Pencil.Build.Tasks
 {
 	using System;
-	using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using Pencil.IO;
+	using System.Runtime.InteropServices;
+    using IO;
 
 	public abstract class ExecTaskBase
 	{
-		IExecutionEnvironment platform;
+	    readonly IExecutionEnvironment platform;
 
 		public Path Program { get { return GetProgramCore(); } }
 

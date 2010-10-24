@@ -1,32 +1,66 @@
+using System.Linq;
+
 namespace Pencil.Build.Tasks
 {
 	using System;
     using System.Text;
-    using Pencil.IO;
+    using IO;
 
 	public enum OutputType
 	{
 		Library, Application, WindowsApplication, Module
 	}
 
+    public enum CompilerVersion
+    {
+        v35, v40
+    }
+
 	public class CSharpCompilerTask : CompilerBaseTask
 	{
-		public OutputType OutputType { get; set; }
+	    private readonly IFileSystem fileSystem;
+	    public OutputType OutputType { get; set; }
 		public bool Debug { get; set; }
 		public bool Optimize { get; set; }
 
-        public CSharpCompilerTask(IFileSystem fileSystem, 
-            IExecutionEnvironment executionEnvironment): base(fileSystem, executionEnvironment)
-        {}
+	    public CompilerVersion Version { get; set; }
 
-		protected override Path GetProgramCore()
+	    public CSharpCompilerTask(IFileSystem fileSystem, 
+            IExecutionEnvironment executionEnvironment): base(fileSystem, executionEnvironment)
+	    {
+	        this.fileSystem = fileSystem;
+	    }
+
+	    protected override Path GetProgramCore()
 		{
 			if(IsRunningOnMono)
 				return RuntimeDirectory + "gmcs.exe";
-			return RuntimeDirectory + ".." + "v3.5" + "csc.exe";
+
+			return CompilerDirectory + "csc.exe";
 		}
 
-		protected override string GetArgumentsCore()
+	    private Path CompilerDirectory
+	    {
+	        get
+	        {
+	            switch (Version)
+	            {
+	                case CompilerVersion.v35:
+	                    return RuntimeDirectory + ".." + "v3.5";
+	                case CompilerVersion.v40:
+	                    return GuessCompilerDirectory("v4.0");
+	                default:
+                        throw new InvalidOperationException(string.Format("Path of compiler version {0} was not found", Version));
+                }
+	        }
+	    }
+
+	    private Path GuessCompilerDirectory(string folderPrefix)
+	    {
+	        return fileSystem.GetDirectories(RuntimeDirectory + "..", folderPrefix + "*").FirstOrDefault();
+	    }
+
+	    protected override string GetArgumentsCore()
 		{
 			if(Output == null)
 				throw new InvalidOperationException("Output path is null.");

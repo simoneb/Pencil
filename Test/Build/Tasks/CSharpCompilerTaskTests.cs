@@ -1,22 +1,32 @@
+using Pencil.Core;
+using Assembly = System.Reflection.Assembly;
+
 namespace Pencil.Test.Build.Tasks
 {
-    using System;
     using NUnit.Framework;
-    using Pencil.Build;
     using Pencil.Build.Tasks;
-    using Pencil.Test.Stubs;
-    using Pencil.IO;
+    using Stubs;
+    using IO;
 
     [TestFixture]
     public class CSharpCompilerTaskTests
     {
-    	[Test]
+        private CSharpCompilerTask compiler;
+        private ExecutionEnvironmentStub environment;
+        private FileSystemStub fileSystem;
+
+        [SetUp]
+        public void Setup()
+        {
+            fileSystem = new FileSystemStub();
+            environment = new ExecutionEnvironmentStub();
+
+            compiler = new CSharpCompilerTask(fileSystem, environment);
+        }
+
+        [Test]
     	public void Should_support_Optimize_flag()
     	{
-            var fileSystem = new FileSystemStub();
-            var environment = new ExecutionEnvironmentStub();
-            var compiler = new CSharpCompilerTask(fileSystem, environment);
-
 			compiler.Optimize = true;
 			environment.RunHandler = (fileName, arguments, x) =>
 			{
@@ -25,13 +35,27 @@ namespace Pencil.Test.Build.Tasks
 			compiler.Output = new Path("MyAssembly.dll");
 			compiler.Execute();
     	}
+
+        [TestCase(CompilerVersion.v35, "v3.5")]
+        [TestCase(CompilerVersion.v40, "v4.0.30319")]
+        public void Should_support_compiler_version(CompilerVersion version, string fxVersionFolder)
+        {
+            compiler.Version = version;
+
+            fileSystem.GetDirectoriesHandler = (root, pattern) => new[] { Path.Empty + fxVersionFolder };
+
+            environment.RunHandler = (fileName, arguments, x) =>
+            {
+                fileName.Contains(fxVersionFolder).ShouldBe(true);
+            };
+
+            compiler.Output = new Path("MyAssembly.dll");
+            compiler.Execute();
+        }
+
         [Test]
         public void Should_create_target_directory_if_not_present()
         {
-            var fileSystem = new FileSystemStub();
-            var environment = new ExecutionEnvironmentStub();
-
-            var compiler = new CSharpCompilerTask(fileSystem, environment);
 			var outDir = new Path("Build").Combine("Debug");
             compiler.Output = outDir.Combine("Pencil.Build.dll");
             Path createdDirectory = Path.Empty;
@@ -42,13 +66,10 @@ namespace Pencil.Test.Build.Tasks
 
             outDir.ShouldEqual(createdDirectory);
         }
+
         [Test]
         public void Should_copy_referenced_assemblies()
         {
-            var fileSystem = new FileSystemStub();
-            var environment = new ExecutionEnvironmentStub();
-
-            var compiler = new CSharpCompilerTask(fileSystem, environment);
 			var outDir = new Path("Build");
             compiler.Output = outDir.Combine("Bar.dll");
             compiler.References.Add(new Path("Foo.dll"));
@@ -66,13 +87,10 @@ namespace Pencil.Test.Build.Tasks
 
             Assert.IsTrue(copied, "Referenced assembly not copied.");
         }
+
         [Test]
         public void Wont_copy_referenced_assemblies_already_present()
         {
-            var fileSystem = new FileSystemStub();
-            var environment = new ExecutionEnvironmentStub();
-
-            var compiler = new CSharpCompilerTask(fileSystem, environment);
             compiler.Output = new Path("Build").Combine("Bar.dll");
             compiler.References.Add(new Path("Foo.dll"));
 

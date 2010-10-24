@@ -23,5 +23,10 @@ namespace Pencil.IO
 				yield return new Path(item);
 		}
 		public DateTime GetLastWriteTime(Path path){ return File.GetLastWriteTime(path.ToString()); }
+        public IEnumerable<Path> GetDirectories(Path root, string pattern)
+        {
+            foreach (var item in Directory.GetDirectories(root.ToString(), pattern))
+                yield return new Path(item);
+        }
     }
 }
