@@ -78,6 +78,10 @@
     <Compile Include="Build\TargetTests.cs" />
     <Compile Include="Build\Tasks\CSharpCompilerTaskTests.cs" />
     <Compile Include="Build\Tasks\ExecTaskBaseTests.cs" />
+    <Compile Include="Build\Tasks\MSBuild20TaskTests.cs" />
+    <Compile Include="Build\Tasks\MSBuild3540TaskTestsBase.cs" />
+    <Compile Include="Build\Tasks\MSBuild35TaskTests.cs" />
+    <Compile Include="Build\Tasks\MSBuild40TaskTests.cs" />
     <Compile Include="Build\Tasks\MSBuildTaskTests.cs" />
     <Compile Include="Core\ArrayExtensionsTests.cs" />
     <Compile Include="Core\AssemblyDependencyGraphTests.cs" />

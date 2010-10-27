@@ -76,7 +76,13 @@
     <Compile Include="Build\Tasks\ExecTaskBase.cs" />
     <Compile Include="Build\TargetFailedException.cs" />
     <Compile Include="Build\CompilationFailedException.cs" />
+    <Compile Include="Build\Tasks\MSBuild20Task.cs" />
+    <Compile Include="Build\Tasks\MSBuild3540Task.cs" />
+    <Compile Include="Build\Tasks\MSBuild35Task.cs" />
+    <Compile Include="Build\Tasks\MSBuild40Task.cs" />
     <Compile Include="Build\Tasks\MSBuildTask.cs" />
+    <Compile Include="Build\Tasks\MSBuildToolsVersion.cs" />
+    <Compile Include="Build\Tasks\MSBuildVerbosity.cs" />
     <Compile Include="Build\ZeptoContainer.cs" />
     <Compile Include="Build\ProjectCompiler.cs" />
     <Compile Include="Build\Tasks\NUnitTask.cs" />

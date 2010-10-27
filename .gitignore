@@ -1,8 +1,9 @@
-Build
 *.suo
 *.pidb
 *.userprefs
 *.user
+*.cache
 obj/
 bin/
 _ReSharper*/
+/Build/
