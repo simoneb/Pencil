@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Pencil.IO;
 
@@ -13,7 +12,7 @@ namespace Pencil.Build.Tasks
 
         protected override Path GetMSBuildPath()
         {
-            return FileSystem.GetDirectories(FrameworksDirectory, "v2.0").First() + "msbuild.exe";
+            return FileSystem.GetDirectories(FrameworksDirectory, "v2.0*").First() + "msbuild.exe";
         }
 
         protected override void AppendAdditionalArguments(StringBuilder builder)

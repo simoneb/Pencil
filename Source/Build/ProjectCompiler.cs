@@ -37,7 +37,7 @@ namespace Pencil.Build
 			return options;
 		}
 
-		IProject GetProject(System.Type[] types)
+		IProject GetProject(IEnumerable<Type> types)
 		{
 			foreach(var item in types)
 				if(typeof(IProject).IsAssignableFrom(item))

@@ -59,6 +59,7 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Build\DefaultTargetAttribute.cs" />
     <Compile Include="Build\DependsOnAttribute.cs" />
     <Compile Include="Build\ExecutionEnvironment.cs" />
     <Compile Include="Build\IExecutionEnvironment.cs" />
@@ -120,5 +121,8 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
 </Project>

@@ -1,21 +1,28 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Pencil.Build
 {
-	using System;
-	using System.Collections.Generic;
-
 	public class Project : IProject
 	{
-		readonly Dictionary<string,Target> targets;
+		readonly Dictionary<string, Target> targets;
 		readonly HashSet<string> done = new HashSet<string>();
-		internal Logger logger = new Logger(System.IO.TextWriter.Null);
+		internal Logger logger = new Logger(TextWriter.Null);
 		readonly ZeptoContainer container = new ZeptoContainer();
 
 		public Project()
 		{
-			targets = new MethodTargetExtractor().GetTargets(this);
+			targets = MethodTargetExtractor.GetTargets(this);
 		}
 
-		public T New<T>()
+	    public string DefaultTarget
+	    {
+            get { return targets.FirstOrDefault(t => t.Value.IsDefault).Key; }
+	    }
+
+	    public T New<T>()
 		{
 			return container.Get<T>();
 		}
@@ -29,7 +36,9 @@ namespace Pencil.Build
 		{
 			if(done.Contains(targetName))
 				return;
+
 			logger.Write("{0}:", targetName);
+
 			using(logger.Indent())
 			{
 				RunCore(targetName);
@@ -43,5 +52,10 @@ namespace Pencil.Build
 		}
 
 		public void Register<T>(T instance){ container.Register(typeof(T), instance); }
+
+	    public bool HasDefaultTarget
+	    {
+            get { return !string.IsNullOrEmpty(DefaultTarget); }
+	    }
 	}
 }

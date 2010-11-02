@@ -14,12 +14,14 @@ namespace Pencil.Build
 		static int Main(string[] args)
 		{
 			var logger = new Logger(Console.Out);
-			var codeProvider = new CSharpCodeProvider(new Dictionary<string,string>(){{"CompilerVersion", "v3.5"}});
-			var compiler = new ProjectCompiler(logger, codeProvider,
-				GetReferencedAssemblies(args));
+			var codeProvider = new CSharpCodeProvider(new Dictionary<string,string> {{"CompilerVersion", "v3.5"}});
+			var compiler = new ProjectCompiler(logger, codeProvider, GetReferencedAssemblies(args));
 			var program = new Program(logger, compiler.ProjectFromFile);
+
 			program.ShowLogo();
+
 			var stopwatch = Stopwatch.StartNew();
+
             try
             {
 				return program.Run(GetArguments(args));
@@ -31,7 +33,7 @@ namespace Pencil.Build
             }
 		}
 
-		public static IEnumerable<Path> GetReferencedAssemblies(string[] args)
+		public static IEnumerable<Path> GetReferencedAssemblies(IEnumerable<string> args)
 		{
 			yield return new Path(Assembly.GetExecutingAssembly().Location);
 			yield return new Path(Assembly.GetAssembly(typeof(Path)).Location);

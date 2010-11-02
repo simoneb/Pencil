@@ -1,13 +1,12 @@
 namespace Pencil.Build
 {
-	using System;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	using System.Reflection;
 
 	public class MethodTarget : Target
 	{
-		IProject project;
-		MethodInfo method;
+	    readonly IProject project;
+	    readonly MethodInfo method;
 
 		public MethodTarget(IProject project, MethodInfo method)
 		{
@@ -34,5 +33,10 @@ namespace Pencil.Build
 				throw new TargetFailedException(e.InnerException);
 			}
 		}
+
+	    public override bool IsDefault
+	    {
+            get { return method.IsDefined(typeof (DefaultTargetAttribute), false); }
+	    }
 	}
 }

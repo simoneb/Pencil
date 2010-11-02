@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using NUnit.Framework;
 using Pencil.Build.Tasks;
 using Pencil.IO;
@@ -65,13 +64,17 @@ namespace Pencil.Test.Build.Tasks
         [Test]
         public void Should_accept_single_property()
         {
-            CheckArgument(t => t.Properties = new Hashtable {{ "prop1", "value1" }}, " /property:prop1=value1");
+            CheckArgument(t => t.AddProperty("prop1", "value1"), " /property:prop1=value1");
         }
 
         [Test]
         public void Should_accept_multiple_properties()
         {
-            CheckArgument(t => t.Properties = new Hashtable { { "prop1", "value1" }, {"prop2", "value2"} }, " /property:prop1=value1;prop2=value2");
+            CheckArgument(t =>
+                          {
+                              t.AddProperty("prop1", "value1");
+                              t.AddProperty("prop2", "value2");
+                          }, " /property:prop1=value1;prop2=value2");
         }
 
         [TestCase(MSBuildVerbosity.Quiet, "quiet")]

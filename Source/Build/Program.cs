@@ -1,8 +1,9 @@
+using System;
+using Pencil.IO;
+using System.Linq;
+
 namespace Pencil.Build
 {
-	using System;
-	using IO;
-	
 	public class Program
 	{
 		public const int Success = 0;
@@ -11,7 +12,7 @@ namespace Pencil.Build
 		readonly Logger output;
 		readonly Converter<string,IProject> compiler;
 
- 		public Program(Logger output, Converter<string,IProject> compiler)
+ 		public Program(Logger output, Converter<string, IProject> compiler)
 		{
 			this.output = output;
 			this.compiler = compiler;
@@ -20,12 +21,19 @@ namespace Pencil.Build
 		public int Run(string[] args)
 		{
 			var project = compiler(args[0]);
+
 			project.Register<IFileSystem>(new FileSystem());
 			project.Register<IExecutionEnvironment>(new ExecutionEnvironment(output.Target));
-			for(int i = 1; i < args.Length; ++i)
-				if(BuildTarget(project, args[i]) != Success)
-					return Failure;			
-            output.Write("BUILD SUCCEEDED");
+
+            if (project.HasDefaultTarget && args.Count() == 1)
+                BuildTarget(project, project.DefaultTarget);
+            else
+		        foreach (var target in args.Skip(1))
+		            if (BuildTarget(project, target) != Success)
+		                return Failure;
+
+		    output.Write("BUILD SUCCEEDED");
+
 			return Success;
 		}
 
@@ -38,8 +46,8 @@ namespace Pencil.Build
                     project.Run(target);
                     return Success;
                 }
-                else
-                    output.Write("Target \"{0}\" not found.", target);
+                
+                output.Write("Target \"{0}\" not found.", target);
             }
             catch(TargetFailedException e)
             {
@@ -47,6 +55,7 @@ namespace Pencil.Build
                 output.Write("BUILD FAILED - {0}", error.Message);
 				output.Write(error.StackTrace);
             }
+
             return Failure;
         }
 

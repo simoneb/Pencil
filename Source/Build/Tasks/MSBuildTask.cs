@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Pencil.IO;
 using System.Linq;
@@ -13,14 +13,19 @@ namespace Pencil.Build.Tasks
         {
             FileSystem = fileSystem;
             Targets = new string[0];
-            Properties = new Hashtable();
+            Properties = new List<KeyValuePair<string, string>>();
         }
 
         public string ProjectFile { get; set; }
         public string[] Targets { get; set; }
-        public Hashtable Properties { get; set; }
+        private IList<KeyValuePair<string, string>> Properties { get; set; }
         private MSBuildVerbosity verbosity;
         private bool setVerbosity;
+
+        public void AddProperty(string name, string value)
+        {
+            Properties.Add(new KeyValuePair<string, string>(name, value));
+        }
 
         public MSBuildVerbosity Verbosity
         {
@@ -52,21 +57,24 @@ namespace Pencil.Build.Tasks
                 builder.Append(" /target:")
                     .Append(string.Join(";", Targets));
 
-            if (Properties.Count != 0)
+            if (Properties.Any())
                 builder.Append(" /property:")
-                    .Append(string.Join(";",
-                                        Properties.Cast<DictionaryEntry>().Select(e => e.Key + "=" + e.Value).ToArray()));
+                    .Append(string.Join(";", Properties.Select(e => e.Key + "=" + e.Value).ToArray()));
 
             if(setVerbosity)
                 builder.Append(" /verbosity:").Append(Verbosity.ToString().ToLowerInvariant());
 
-            builder.Append(" ").Append(ProjectFile ??
-                                       FileSystem.GetFiles(Path.Empty, "*.sln").Select(path => path.ToString()).
-                                           FirstOrDefault());
+            builder.Append(" ").Append(ProjectFile ?? GetFirstSolutionInCurrentDir());
 
             AppendAdditionalArguments(builder);
 
             return builder.ToString();
+        }
+
+        private string GetFirstSolutionInCurrentDir()
+        {
+            return FileSystem.GetFiles(Path.Empty, "*.sln").Select(path => path.ToString()).
+                FirstOrDefault();
         }
 
         protected abstract void AppendAdditionalArguments(StringBuilder builder);

@@ -20,10 +20,13 @@ namespace Pencil.Test.Build
 		public class DoubleBuildBug : Project
 		{
 			public Action<string> RunHandler;
-			public void Core(){}
-			[DependsOn("Core")]
+
+		    public void Core(){}
+			
+            [DependsOn("Core")]
 			public void Build(){}
-			[DependsOn("Build"), DependsOn("Core")]
+			
+            [DependsOn("Build"), DependsOn("Core")]
 			public void Test(){}
 
 			protected override void RunCore(string targetName)
@@ -32,6 +35,17 @@ namespace Pencil.Test.Build
 				base.RunCore(targetName);
 			}
 		}
+
+        class WithDefaultTarget : Project
+        {
+            public void Clean() {}
+
+            [DefaultTarget]
+            public void Build() {}
+
+            public void Release() {}
+        }
+
 		[Test]
 		public void Wont_runt_same_target_multiple_times()
 		{
@@ -41,5 +55,17 @@ namespace Pencil.Test.Build
 			project.Run("Test");
 			Assert.That(targetsBuilt, Is.EquivalentTo(new[]{ "Test", "Core", "Build" }));
 		}
+
+        [Test]
+        public void Default_target_should_be_null_if_no_default_target_specified()
+        {
+            Assert.IsNull(new DoubleBuildBug().DefaultTarget);
+        }
+
+        [Test]
+        public void Default_target_should_be_the_name_of_default_target()
+        {
+            Assert.AreEqual("Build", new WithDefaultTarget().DefaultTarget);
+        }
 	}
 }

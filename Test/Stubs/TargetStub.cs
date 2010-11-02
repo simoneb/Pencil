@@ -24,5 +24,10 @@ namespace Pencil.Test.Stubs
 
 		protected override IProject GetProjectCore(){ return project; }
         protected override void ExecuteCore() { ExecuteHandler(); }
+
+        public override bool IsDefault
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

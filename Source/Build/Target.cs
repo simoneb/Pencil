@@ -1,9 +1,8 @@
 namespace Pencil.Build
 {
 	using System.Collections.Generic;
-	using System.Reflection;
 
-	public abstract class Target
+    public abstract class Target
 	{
 		public void Execute()
 		{
@@ -25,5 +24,7 @@ namespace Pencil.Build
 		protected abstract IProject GetProjectCore();
 
 		protected virtual void ExecuteCore(){}
+
+        public abstract bool IsDefault { get; }
 	}
 }

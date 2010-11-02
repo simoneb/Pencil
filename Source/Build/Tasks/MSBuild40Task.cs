@@ -12,7 +12,7 @@ namespace Pencil.Build.Tasks
 
         protected override Path GetMSBuildPath()
         {
-            return FileSystem.GetDirectories(FrameworksDirectory, "v4.0").First() + "msbuild.exe";
+            return FileSystem.GetDirectories(FrameworksDirectory, "v4.0*").First() + "msbuild.exe";
         }
     }
 }
