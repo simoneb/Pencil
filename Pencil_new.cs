@@ -29,6 +29,17 @@ public class PencilProject : Project
         msbuild.Execute();
 	}
 
+    [Default]
+    [DependsOn("Build")]
+    public void Test()
+    {
+        new NUnitTask(Platform)
+                    {
+                        NUnitBinPath = new Path("Tools") + "NUnit",
+                        Target = new Path("Dist") + "Pencil.Test.dll"
+                    }.Execute();
+    }
+
     MSBuild40Task NewMSBuildTask()
     {
         return new MSBuild40Task(FileSystem, Platform);

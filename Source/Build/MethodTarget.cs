@@ -36,7 +36,7 @@ namespace Pencil.Build
 
 	    public override bool IsDefault
 	    {
-            get { return method.IsDefined(typeof (DefaultTargetAttribute), false); }
+            get { return method.IsDefined(typeof (DefaultAttribute), false); }
 	    }
 	}
 }

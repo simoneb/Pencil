@@ -42,6 +42,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -61,7 +63,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Tools\nunit.framework.dll</HintPath>
+      <HintPath>..\Tools\NUnit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -75,6 +77,7 @@
     <Compile Include="Build\LoggerTests.cs" />
     <Compile Include="Build\MethodTargetTests.cs" />
     <Compile Include="Build\ProgramTests.cs" />
+    <Compile Include="Build\StartupTests.cs" />
     <Compile Include="Build\TargetTests.cs" />
     <Compile Include="Build\Tasks\CSharpCompilerTaskTests.cs" />
     <Compile Include="Build\Tasks\ExecTaskBaseTests.cs" />
@@ -124,16 +127,6 @@
     <Compile Include="Build\ProjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Source\Pencil.Build.csproj">
-      <Project>{62B094FB-4868-4824-9B31-831B71254E2C}</Project>
-      <Name>Pencil.Build</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Source\Pencil.Core.csproj">
-      <Project>{E5228228-0A0C-481D-9E4A-808485D70385}</Project>
-      <Name>Pencil.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="SampleProject.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -155,5 +148,15 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Source\Pencil.Build.csproj">
+      <Project>{62B094FB-4868-4824-9B31-831B71254E2C}</Project>
+      <Name>Pencil.Build</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Source\Pencil.Core.csproj">
+      <Project>{E5228228-0A0C-481D-9E4A-808485D70385}</Project>
+      <Name>Pencil.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

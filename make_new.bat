@@ -1,6 +1,6 @@
 @echo off
 color
-@Build\Pencil.Build.exe Pencil_new.cs %*
+@Tools\Pencil.Build.exe Pencil_new.cs %*
 goto %ERRORLEVEL%
 rem Fail!, paint it red.
 :1
@@ -10,3 +10,5 @@ rem Success, paint it green.
 :0
 	color 2F
 :done
+
+pause

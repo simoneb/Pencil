@@ -40,7 +40,7 @@ namespace Pencil.Test.Build
         {
             public void Clean() {}
 
-            [DefaultTarget]
+            [Default]
             public void Build() {}
 
             public void Release() {}
