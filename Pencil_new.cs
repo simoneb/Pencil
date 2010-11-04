@@ -13,7 +13,6 @@ public class PencilProject : Project
 	    var msbuild = NewMSBuildTask();
         msbuild.ShowCommandLine = true;
 	    msbuild.ProjectFile = "Pencil.sln";
-        msbuild.AddProperty("OutDir", "..\\Dist\\");
         msbuild.AddProperty("Configuration", "Release");
         msbuild.AddProperty("Platform", "Any CPU");
         msbuild.Verbosity = MSBuildVerbosity.Normal;
@@ -27,7 +26,6 @@ public class PencilProject : Project
         var msbuild = NewMSBuildTask();
         msbuild.ShowCommandLine = true;
         msbuild.ProjectFile = "Pencil.sln";
-        msbuild.AddProperty("OutDir", "..\\Dist\\");
         msbuild.AddProperty("Configuration", "Release");
         msbuild.AddProperty("Platform", "Any CPU");
         msbuild.Targets = new[] { "Clean" };
@@ -42,7 +40,7 @@ public class PencilProject : Project
         new NUnitTask(Platform)
                     {
                         NUnitBinPath = new Path("Tools") + "NUnit",
-                        Target = new Path("Dist") + "Pencil.Test.dll"
+                        Target = new Path("Test") + "bin" + "Release" + "Pencil.Test.dll"
                     }.Execute();
     }
 
