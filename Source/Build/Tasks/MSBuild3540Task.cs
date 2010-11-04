@@ -68,16 +68,16 @@ namespace Pencil.Build.Tasks
             }
         }
 
-        protected override void AppendAdditionalArguments(StringBuilder builder)
+        protected override void AppendAdditionalArguments(CommandLineBuilder builder)
         {
             if (setMaxCpuCount)
-                builder.Append(" /maxcpucount:").Append(MaxCpuCount);
+                builder.Append("maxcpucount", MaxCpuCount);
 
             if(setToolsVersion)
-                builder.Append(" /toolsversion:").Append((string) PickToolsVersion);
+                builder.Append("toolsversion", PickToolsVersion);
 
             if (setNodeReuse)
-                builder.Append(" /nodeReuse:").Append((bool) NodeReuse);
+                builder.Append("nodeReuse", NodeReuse);
         }
     }
 }

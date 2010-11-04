@@ -51,20 +51,18 @@ namespace Pencil.Build.Tasks
 
         protected override string GetArgumentsCore()
         {
-            var builder = new StringBuilder();
+            var builder = new CommandLineBuilder();
 
             if (Targets.Any())
-                builder.Append(" /target:")
-                    .Append(string.Join(";", Targets));
+                builder.Append("target", string.Join(";", Targets));
 
             if (Properties.Any())
-                builder.Append(" /property:")
-                    .Append(string.Join(";", Properties.Select(e => e.Key + "=" + e.Value).ToArray()));
+                builder.Append("property", string.Join(";", Properties.Select(e => e.Key + "=" + e.Value).ToArray()));
 
             if(setVerbosity)
-                builder.Append(" /verbosity:").Append(Verbosity.ToString().ToLowerInvariant());
+                builder.Append("verbosity", Verbosity.ToString().ToLowerInvariant());
 
-            builder.Append(" ").Append(ProjectFile ?? GetFirstSolutionInCurrentDir());
+            builder.Append(ProjectFile ?? GetFirstSolutionInCurrentDir());
 
             AppendAdditionalArguments(builder);
 
@@ -77,6 +75,6 @@ namespace Pencil.Build.Tasks
                 FirstOrDefault();
         }
 
-        protected abstract void AppendAdditionalArguments(StringBuilder builder);
+        protected abstract void AppendAdditionalArguments(CommandLineBuilder builder);
     }
 }

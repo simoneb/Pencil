@@ -77,6 +77,12 @@ namespace Pencil.Test.Build.Tasks
                           }, " /property:prop1=value1;prop2=value2");
         }
 
+        [Test]
+        public void Should_quote_switch_with_spaces()
+        {
+            CheckArgument(t => t.AddProperty("prop1", "some value"), " /property:\"prop1=some value\"");            
+        }
+
         [TestCase(MSBuildVerbosity.Quiet, "quiet")]
         [TestCase(MSBuildVerbosity.Minimal, "minimal")]
         [TestCase(MSBuildVerbosity.Normal, "normal")]

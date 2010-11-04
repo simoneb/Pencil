@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 using Pencil.IO;
 
 namespace Pencil.Build.Tasks
@@ -15,7 +14,7 @@ namespace Pencil.Build.Tasks
             return FileSystem.GetDirectories(FrameworksDirectory, "v2.0*").First() + "msbuild.exe";
         }
 
-        protected override void AppendAdditionalArguments(StringBuilder builder)
+        protected override void AppendAdditionalArguments(CommandLineBuilder builder)
         {
             
         }

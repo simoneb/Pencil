@@ -73,6 +73,7 @@
     <Compile Include="Build\Program.cs" />
     <Compile Include="Build\Project.cs" />
     <Compile Include="Build\Target.cs" />
+    <Compile Include="Build\Tasks\CommandLineBuilder.cs" />
     <Compile Include="Build\Tasks\CompilerBaseTask.cs" />
     <Compile Include="Build\Tasks\CSharpCompilerTask.cs" />
     <Compile Include="Build\Tasks\ExecTask.cs" />
