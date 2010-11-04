@@ -1,6 +1,8 @@
+using System.IO;
 using Pencil.IO;
 using Pencil.Build;
 using Pencil.Build.Tasks;
+using Path = Pencil.IO.Path;
 
 public class PencilProject : Project
 {
@@ -42,6 +44,21 @@ public class PencilProject : Project
                         NUnitBinPath = new Path("Tools") + "NUnit",
                         Target = new Path("Test") + "bin" + "Release" + "Pencil.Test.dll"
                     }.Execute();
+    }
+
+    [DependsOn("Build")]
+    [DependsOn("Test")]
+    public void Dist()
+    {
+        var dist = "dist";
+
+        if(Directory.Exists(dist))
+            Directory.Delete(dist, true);
+
+        Directory.CreateDirectory(dist);
+
+        foreach (var file in Directory.GetFiles("Source/bin/Release"))
+            File.Copy(file, System.IO.Path.Combine(dist, System.IO.Path.GetFileName(file)));
     }
 
     MSBuild40Task NewMSBuildTask()
