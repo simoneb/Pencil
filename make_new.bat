@@ -14,5 +14,4 @@ rem Fail!, paint it red.
 	
 :done
 
-@pause
-color
+	color
