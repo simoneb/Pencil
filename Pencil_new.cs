@@ -11,10 +11,11 @@ public class PencilProject : Project
 	public void Build()
 	{
 	    var msbuild = NewMSBuildTask();
+        msbuild.ShowCommandLine = true;
 	    msbuild.ProjectFile = "Pencil.sln";
         msbuild.AddProperty("OutDir", "..\\Dist\\");
         msbuild.AddProperty("Configuration", "Release");
-        msbuild.AddProperty("Platform", "\"Any CPU\"");
+        msbuild.AddProperty("Platform", "Any CPU");
         msbuild.Verbosity = MSBuildVerbosity.Normal;
 	    msbuild.Targets = new[] {"Rebuild"};
 
@@ -24,10 +25,11 @@ public class PencilProject : Project
 	public void Clean()
 	{
         var msbuild = NewMSBuildTask();
+        msbuild.ShowCommandLine = true;
         msbuild.ProjectFile = "Pencil.sln";
         msbuild.AddProperty("OutDir", "..\\Dist\\");
         msbuild.AddProperty("Configuration", "Release");
-        msbuild.AddProperty("Platform", "\"Any CPU\"");
+        msbuild.AddProperty("Platform", "Any CPU");
         msbuild.Targets = new[] { "Clean" };
 
         msbuild.Execute();

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using Pencil.IO;
 using System.Linq;
 
@@ -39,7 +38,7 @@ namespace Pencil.Build.Tasks
 
         protected Path FrameworksDirectory
         {
-            get { return RuntimeDirectory + ".."; }
+            get { return RuntimeDirectory.Parent; }
         }
 
         protected override sealed Path GetProgramCore()
@@ -56,8 +55,8 @@ namespace Pencil.Build.Tasks
             if (Targets.Any())
                 builder.Append("target", string.Join(";", Targets));
 
-            if (Properties.Any())
-                builder.Append("property", string.Join(";", Properties.Select(e => e.Key + "=" + e.Value).ToArray()));
+            foreach (var property in Properties)
+                builder.Append("property", property.Key + "=" + property.Value);
 
             if(setVerbosity)
                 builder.Append("verbosity", Verbosity.ToString().ToLowerInvariant());

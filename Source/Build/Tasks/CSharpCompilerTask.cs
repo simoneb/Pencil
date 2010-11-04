@@ -46,7 +46,7 @@ namespace Pencil.Build.Tasks
 	            switch (Version)
 	            {
 	                case CompilerVersion.v35:
-	                    return RuntimeDirectory + ".." + "v3.5";
+	                    return RuntimeDirectory.Parent + "v3.5";
 	                case CompilerVersion.v40:
 	                    return GuessCompilerDirectory("v4.0");
 	                default:
@@ -57,7 +57,7 @@ namespace Pencil.Build.Tasks
 
 	    private Path GuessCompilerDirectory(string folderPrefix)
 	    {
-	        return fileSystem.GetDirectories(RuntimeDirectory + "..", folderPrefix + "*").FirstOrDefault();
+	        return fileSystem.GetDirectories(RuntimeDirectory.Parent, folderPrefix + "*").FirstOrDefault();
 	    }
 
 	    protected override string GetArgumentsCore()

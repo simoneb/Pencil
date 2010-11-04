@@ -8,5 +8,6 @@ namespace Pencil.Build
         void Run(string fileName, string arguments, Action<IProcess> processHandler);
 		TextWriter StandardOut { get; }
 		bool IsMono { get; }
+        string CurrentDirectory { get; }
     }
 }

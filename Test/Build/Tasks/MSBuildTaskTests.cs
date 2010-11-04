@@ -74,7 +74,7 @@ namespace Pencil.Test.Build.Tasks
                           {
                               t.AddProperty("prop1", "value1");
                               t.AddProperty("prop2", "value2");
-                          }, " /property:prop1=value1;prop2=value2");
+                          }, " /property:prop1=value1 /property:prop2=value2");
         }
 
         [Test]

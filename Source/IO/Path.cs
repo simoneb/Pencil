@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Pencil.IO
 {
 	using FXPath = System.IO.Path;
@@ -9,7 +11,12 @@ namespace Pencil.IO
 
 		public Path(string path){ this.path = path; }
 
-		public Path Combine(string child){ return new Path(FXPath.Combine(path, child)); }
+	    public Path Parent
+	    {
+            get { return new Path(new DirectoryInfo(path).Parent.FullName); }
+	    }
+
+	    public Path Combine(string child){ return new Path(FXPath.Combine(path, child)); }
 		public Path GetDirectory(){ return new Path(GetDirectoryName()); }
 
 		public string GetDirectoryName(){ return FXPath.GetDirectoryName(path); }
