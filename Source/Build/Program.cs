@@ -1,6 +1,7 @@
 using System;
-using Pencil.IO;
 using System.Linq;
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
 
 namespace Pencil.Build
 {
@@ -22,7 +23,7 @@ namespace Pencil.Build
 		{
 			var project = compiler(args[0]);
 
-			project.Register<IFileSystem>(new FileSystem());
+			project.Register<IFileSystem>(LocalFileSystem.Instance);
 			project.Register<IExecutionEnvironment>(new ExecutionEnvironment(output.Target));
 
             if (project.HasDefaultTarget && args.Count() == 1)

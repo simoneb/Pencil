@@ -1,11 +1,12 @@
-﻿using Pencil.Build.Tasks;
-using Pencil.Test.Stubs;
+﻿using OpenFileSystem.IO;
+using Pencil.Build;
+using Pencil.Build.Tasks;
 
 namespace Pencil.Test.Build.Tasks
 {
     class MSBuild35TaskTests : MSBuild3540TaskTestsBase<MSBuild35Task>
     {
-        protected override MSBuild35Task CreateTask(FileSystemStub fileSystem, ExecutionEnvironmentStub executionEnvironment)
+        protected override MSBuild35Task CreateTask(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
         {
             return new MSBuild35Task(fileSystem, executionEnvironment);
         }

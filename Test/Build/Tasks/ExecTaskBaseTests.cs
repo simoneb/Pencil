@@ -1,3 +1,7 @@
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.InMemory;
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Test.Build.Tasks
 {
     using Pencil.Build;
@@ -11,7 +15,7 @@ namespace Pencil.Test.Build.Tasks
     {
         class TestTask : ExecTaskBase
         {
-            public TestTask(IExecutionEnvironment platform): base(platform)
+            public TestTask(IFileSystem fileSystem, IExecutionEnvironment platform): base(fileSystem, platform)
             {}
             protected override Path GetProgramCore(){ return new Path("TestTask"); }
 		    protected override  string GetArgumentsCore(){ return string.Empty; }
@@ -29,8 +33,9 @@ namespace Pencil.Test.Build.Tasks
                 return 0;
             };
             var platform = new ExecutionEnvironmentStub();
+            var fileSystem = new InMemoryFileSystem();
             platform.RunHandler = (program, args, handler) => handler(process);
-            var task = new TestTask(platform);
+            var task = new TestTask(fileSystem, platform);
             task.Execute();
         }
     }

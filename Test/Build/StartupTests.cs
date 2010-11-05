@@ -1,10 +1,11 @@
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Test.Build
 {
 	using NUnit.Framework;
 	using Pencil.Build;
-	using Pencil.IO;
 
-	[TestFixture]
+    [TestFixture]
 	public class StartupTests
 	{
 		[Test]

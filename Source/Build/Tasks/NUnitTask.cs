@@ -1,20 +1,22 @@
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Build.Tasks
 {
     using System.Text;
-    using IO;
 
     public class NUnitTask : ExecTaskBase
     {
-        public NUnitTask(IExecutionEnvironment executionEnvironment) : base(executionEnvironment)
+        public NUnitTask(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment) : base(fileSystem, executionEnvironment)
         {
-            NUnitBinPath = Path.Empty;
+            NUnitBinPath = new Path(".");
             ShowLogo = true;
             ShadowCopy = true;
         }
 
         public Path NUnitPath
         {
-            get { return NUnitBinPath + "nunit-console.exe"; }
+            get { return  NUnitBinPath.Combine("nunit-console.exe"); }
         }
 
         public Path NUnitBinPath { get; set; }

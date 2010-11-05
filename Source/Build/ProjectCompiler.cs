@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.CodeDom.Compiler;
+using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Core;
-using Pencil.IO;
 
 namespace Pencil.Build
 {
@@ -30,10 +30,8 @@ namespace Pencil.Build
 
 		CompilerParameters GetCompilerParameters()
 		{
-			var options = new CompilerParameters();
-			options.GenerateExecutable = false;
-			options.GenerateInMemory = true;
-			referencedAssemblies.ForEach(x => options.ReferencedAssemblies.Add(x.ToString()));
+			var options = new CompilerParameters {GenerateExecutable = false, GenerateInMemory = true};
+		    referencedAssemblies.ForEach(x => options.ReferencedAssemblies.Add(x.ToString()));
 			return options;
 		}
 
@@ -42,7 +40,7 @@ namespace Pencil.Build
 			foreach(var item in types)
 				if(typeof(IProject).IsAssignableFrom(item))
 				{
-					var project = item.GetConstructor(System.Type.EmptyTypes).Invoke(null) as Project;
+					var project = item.GetConstructor(Type.EmptyTypes).Invoke(null) as Project;
 					project.logger = logger;
 					return project;
 				}

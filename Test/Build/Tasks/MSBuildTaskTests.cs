@@ -1,9 +1,11 @@
 using System;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.InMemory;
+using Pencil.Build;
 using Pencil.Build.Tasks;
-using Pencil.IO;
 using Pencil.Test.Stubs;
-using System.Linq;
 
 namespace Pencil.Test.Build.Tasks
 {
@@ -11,39 +13,35 @@ namespace Pencil.Test.Build.Tasks
     public abstract class MSBuildTaskTests<TTask> where TTask : MSBuildTask
     {
         private ExecutionEnvironmentStub executionEnvironment;
-        private FileSystemStub fileSystem;
+        private InMemoryFileSystem fileSystem;
         private TTask task;
 
         [SetUp]
         public void Setup()
         {
             executionEnvironment = new ExecutionEnvironmentStub();
-            fileSystem = new FileSystemStub();
+            fileSystem = new InMemoryFileSystem();
             task = CreateTask(fileSystem, executionEnvironment);
 
-            fileSystem.GetDirectoriesHandler = (root, pattern) =>
-                                               new[]
-                                               {
-                                                   new Path("whatever") + ExpectedMSBuildPathFragment + "12345",
-                                               };
+            fileSystem.GetDirectory(RuntimeEnvironment.GetRuntimeDirectory()).Parent.Create().GetOrCreateDirectory(ExpectedMSBuildPathFragment + "1345")
+    .GetFile("msbuild.exe").Create();
         }
 
-        protected abstract TTask CreateTask(FileSystemStub fileSystem, ExecutionEnvironmentStub executionEnvironment);
+        protected abstract TTask CreateTask(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment);
 
-        [TestCase(new[] { "log.txt, solution.sln" }, "solution.sln")]
-        [TestCase(new[] { "solution.sln, log.txt" }, "solution.sln")]
-        [TestCase(new[] { "solution1.sln, solution2.sln" }, "solution1.sln")]
-        [TestCase(new[] { "solution2.sln, solution1.sln" }, "solution2.sln")]
+        [TestCase(new[] { "log.txt", "solution.sln" }, "solution.sln")]
+        [TestCase(new[] { "solution.sln", "log.txt" }, "solution.sln")]
+        [TestCase(new[] { "solution1.sln", "solution2.sln" }, "solution1.sln")]
+        [TestCase(new[] { "solution2.sln", "solution1.sln" }, "solution2.sln")]
         public void Should_pick_first_sln_if_no_project_supplied(string[] files, string expectedChoice)
         {
-            fileSystem.GetFilesRecursiveHandler = (path, pattern) =>
-                                                  {
-                                                      return files.Select(f => new Path(f));
-                                                  };
+
+            foreach (var file in files)
+                fileSystem.GetFile(file).Create();
 
             executionEnvironment.RunHandler = (fileName, arguments, processHandler) =>
                                               {
-                                                  arguments.Contains(expectedChoice).ShouldBe(true);
+                                                  Assert.That(arguments, Contains.Substring(expectedChoice));
                                               };
 
             task.Execute();

@@ -1,3 +1,6 @@
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Build.Tasks
 {
 	using Pencil.IO;
@@ -6,7 +9,7 @@ namespace Pencil.Build.Tasks
 	{
 		Path program;
 		
-        public ExecTask(IExecutionEnvironment executionEnvironment) : base(executionEnvironment) { }
+        public ExecTask(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment) : base(fileSystem, executionEnvironment) { }
 		new public Path Program { get { return base.Program; } set { program = value; } }
 		public string CommandLine { get; set; }
 

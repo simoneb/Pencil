@@ -1,16 +1,14 @@
 using System.Collections.Generic;
-using Pencil.IO;
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
 using System.Linq;
 
 namespace Pencil.Build.Tasks
 {
     public abstract class MSBuildTask : ExecTaskBase
     {
-        protected IFileSystem FileSystem { get; private set; }
-
-        protected MSBuildTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(platform)
+        protected MSBuildTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
-            FileSystem = fileSystem;
             Targets = new string[0];
             Properties = new List<KeyValuePair<string, string>>();
         }
@@ -36,7 +34,7 @@ namespace Pencil.Build.Tasks
             }
         }
 
-        protected Path FrameworksDirectory
+        protected IDirectory FrameworksDirectory
         {
             get { return RuntimeDirectory.Parent; }
         }
@@ -70,8 +68,7 @@ namespace Pencil.Build.Tasks
 
         private string GetFirstSolutionInCurrentDir()
         {
-            return FileSystem.GetFiles(Path.Empty, "*.sln").Select(path => path.ToString()).
-                FirstOrDefault();
+            return FileSystem.GetDirectory(".").Files("*.sln").Select(file => file.ToString()).FirstOrDefault();
         }
 
         protected abstract void AppendAdditionalArguments(CommandLineBuilder builder);

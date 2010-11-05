@@ -1,8 +1,7 @@
-using System.IO;
-using Pencil.IO;
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Build;
 using Pencil.Build.Tasks;
-using Path = Pencil.IO.Path;
 
 public class PencilProject : Project
 {
@@ -39,10 +38,10 @@ public class PencilProject : Project
     [DependsOn("Build")]
     public void Test()
     {
-        new NUnitTask(Platform)
+        new NUnitTask(FileSystem, Platform)
                     {
-                        NUnitBinPath = new Path("Tools") + "NUnit",
-                        Target = new Path("Test") + "bin" + "Release" + "Pencil.Test.dll"
+                        NUnitBinPath = new Path(@"Tools\NUnit"),
+                        Target = new Path(@"Test\bin\Release\Pencil.Test.dll")
                     }.Execute();
     }
 
@@ -52,13 +51,13 @@ public class PencilProject : Project
     {
         var dist = "dist";
 
-        if(Directory.Exists(dist))
-            Directory.Delete(dist, true);
+        //if(Directory.Exists(dist))
+        //    Directory.Delete(dist, true);
 
-        Directory.CreateDirectory(dist);
+        //Directory.CreateDirectory(dist);
 
-        foreach (var file in Directory.GetFiles("Source/bin/Release"))
-            File.Copy(file, System.IO.Path.Combine(dist, System.IO.Path.GetFileName(file)));
+        //foreach (var file in Directory.GetFiles("Source/bin/Release"))
+        //    File.Copy(file, System.IO.Path.Combine(dist, System.IO.Path.GetFileName(file)));
     }
 
     MSBuild40Task NewMSBuildTask()

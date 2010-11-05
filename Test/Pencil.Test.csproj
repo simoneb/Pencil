@@ -64,6 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="OpenFileSystem">
+      <HintPath>..\Tools\OpenFileSystem\OpenFileSystem.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -109,7 +112,6 @@
     <Compile Include="Stubs\AssemblyLoaderStub.cs" />
     <Compile Include="Stubs\AssemblyStub.cs" />
     <Compile Include="Stubs\ExecutionEnvironmentStub.cs" />
-    <Compile Include="Stubs\FileSystemStub.cs" />
     <Compile Include="Stubs\HandlerStub.cs" />
     <Compile Include="Stubs\MethodStub.cs" />
     <Compile Include="Stubs\ModuleStub.cs" />
@@ -117,7 +119,6 @@
     <Compile Include="Stubs\ProjectStub.cs" />
     <Compile Include="Stubs\TargetStub.cs" />
     <Compile Include="Stubs\TypeStub.cs" />
-    <Compile Include="Build\PathTests.cs" />
     <Compile Include="Core\DotNodeFactoryTests.cs" />
     <Compile Include="Core\DotNodeTests.cs" />
     <Compile Include="Build\Tasks\NUnitTaskTests.cs" />

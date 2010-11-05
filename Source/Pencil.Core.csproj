@@ -123,11 +123,7 @@
     <Compile Include="Core\NodeCreatedEventArgs.cs" />
     <Compile Include="IO\Pipe.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
-    <Compile Include="IO\IFileSystem.cs" />
-    <Compile Include="IO\Path.cs" />
-    <Compile Include="IO\FileSystem.cs" />
     <Compile Include="IO\TextReaderExtensions.cs" />
-    <Compile Include="IO\FileSystemExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -95,6 +95,9 @@
     <Compile Include="Build\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="OpenFileSystem">
+      <HintPath>..\Tools\OpenFileSystem\OpenFileSystem.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

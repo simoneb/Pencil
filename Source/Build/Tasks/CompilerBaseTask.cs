@@ -1,21 +1,20 @@
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Build.Tasks
 {
-    using IO;
-
     public abstract class CompilerBaseTask : ExecTaskBase
     {
         readonly FileSet sources;
 		readonly FileSet references;
-		Path output = Path.Empty;
 
-		public Path Output { get { return output; } set { output = value; } }
-		public FileSet Sources { get { return sources; } }
+        public Path Output { get; set; }
+        public FileSet Sources { get { return sources; } }
 		public FileSet References { get { return references; } }
 
-        protected CompilerBaseTask(IFileSystem fileSystem, IExecutionEnvironment platform):
-			base(platform)
+        protected CompilerBaseTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
-		    sources = new FileSet(fileSystem);
+            sources = new FileSet(fileSystem);
 		    references = new FileSet(fileSystem);
         }
 

@@ -1,11 +1,12 @@
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Build
 {
 	using System;
 	using System.Diagnostics;
 	using System.Collections.Generic;
 	using Microsoft.CSharp;
-	using Pencil.IO;
-	using Pencil.Core;
+	using Core;
 
 	using Assembly = System.Reflection.Assembly;
 

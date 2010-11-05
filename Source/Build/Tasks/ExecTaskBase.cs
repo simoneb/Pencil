@@ -1,3 +1,6 @@
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
+
 namespace Pencil.Build.Tasks
 {
     using System;
@@ -6,16 +9,18 @@ namespace Pencil.Build.Tasks
 
     public abstract class ExecTaskBase
     {
-        private readonly IExecutionEnvironment platform;
+        protected IFileSystem FileSystem { get; private set; }
+        protected IExecutionEnvironment Platform { get; private set; }
 
         public Path Program
         {
             get { return GetProgramCore(); }
         }
 
-        protected ExecTaskBase(IExecutionEnvironment platform)
+        protected ExecTaskBase(IFileSystem fileSystem, IExecutionEnvironment platform)
         {
-            this.platform = platform;
+            FileSystem = fileSystem;
+            Platform = platform;
         }
 
         public bool ShowCommandLine { get; set; }
@@ -26,12 +31,12 @@ namespace Pencil.Build.Tasks
             var arguments = GetArgumentsCore();
 
             if(ShowCommandLine)
-                platform.StandardOut.WriteLine("Running {0} {1} in folder {2}", fileName, arguments, platform.CurrentDirectory);
+                Platform.StandardOut.WriteLine("Running {0} {1} in folder {2}", fileName, arguments, Platform.CurrentDirectory);
 
-            platform.Run(fileName, arguments, task =>
+            Platform.Run(fileName, arguments, task =>
                                               {
                                                   while (!task.HasExited)
-                                                      task.StandardOutput.CopyTo(platform.StandardOut);
+                                                      task.StandardOutput.CopyTo(Platform.StandardOut);
 
                                                   task.WaitForExit();
 
@@ -42,12 +47,12 @@ namespace Pencil.Build.Tasks
 
         protected bool IsRunningOnMono
         {
-            get { return platform.IsMono; }
+            get { return Platform.IsMono; }
         }
 
-        protected Path RuntimeDirectory
+        protected IDirectory RuntimeDirectory
         {
-            get { return new Path(RuntimeEnvironment.GetRuntimeDirectory()); }
+            get { return FileSystem.GetDirectory(RuntimeEnvironment.GetRuntimeDirectory()); }
         }
 
         protected abstract Path GetProgramCore();

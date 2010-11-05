@@ -1,12 +1,13 @@
 using System.Linq;
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
 
 namespace Pencil.Build.Tasks
 {
 	using System;
     using System.Text;
-    using IO;
 
-	public enum OutputType
+    public enum OutputType
 	{
 		Library, Application, WindowsApplication, Module
 	}
@@ -18,7 +19,6 @@ namespace Pencil.Build.Tasks
 
 	public class CSharpCompilerTask : CompilerBaseTask
 	{
-	    private readonly IFileSystem fileSystem;
 	    public OutputType OutputType { get; set; }
 		public bool Debug { get; set; }
 		public bool Optimize { get; set; }
@@ -28,15 +28,14 @@ namespace Pencil.Build.Tasks
 	    public CSharpCompilerTask(IFileSystem fileSystem, 
             IExecutionEnvironment executionEnvironment): base(fileSystem, executionEnvironment)
 	    {
-	        this.fileSystem = fileSystem;
 	    }
 
 	    protected override Path GetProgramCore()
 		{
 			if(IsRunningOnMono)
-				return RuntimeDirectory + "gmcs.exe";
+				return RuntimeDirectory.GetFile("gmcs.exe").Path;
 
-			return CompilerDirectory + "csc.exe";
+			return CompilerDirectory.Combine("csc.exe");
 		}
 
 	    private Path CompilerDirectory
@@ -46,7 +45,7 @@ namespace Pencil.Build.Tasks
 	            switch (Version)
 	            {
 	                case CompilerVersion.v35:
-	                    return RuntimeDirectory.Parent + "v3.5";
+	                    return RuntimeDirectory.Parent.Path.Combine("v3.5");
 	                case CompilerVersion.v40:
 	                    return GuessCompilerDirectory("v4.0");
 	                default:
@@ -57,14 +56,14 @@ namespace Pencil.Build.Tasks
 
 	    private Path GuessCompilerDirectory(string folderPrefix)
 	    {
-	        return fileSystem.GetDirectories(RuntimeDirectory.Parent, folderPrefix + "*").FirstOrDefault();
+	        return RuntimeDirectory.Parent.Directories(folderPrefix + "*").FirstOrDefault().Path;
 	    }
 
 	    protected override string GetArgumentsCore()
 		{
 			if(Output == null)
 				throw new InvalidOperationException("Output path is null.");
-			References.CopyTo(Output.GetDirectory());
+			References.CopyTo(Output);
 			return CollectArguments();
 		}
 
