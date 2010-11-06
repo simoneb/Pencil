@@ -1,7 +1,7 @@
 using OpenFileSystem.IO;
-using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Build;
 using Pencil.Build.Tasks;
+using Path = OpenFileSystem.IO.FileSystem.Local.Path;
 
 public class PencilProject : Project
 {
@@ -49,15 +49,15 @@ public class PencilProject : Project
     [DependsOn("Test")]
     public void Dist()
     {
-        var dist = "dist";
+        var dist = FileSystem.GetDirectory("dist");
 
-        //if(Directory.Exists(dist))
-        //    Directory.Delete(dist, true);
+        if (dist.Exists)
+            dist.Delete();
 
-        //Directory.CreateDirectory(dist);
+        dist.MustExist();
 
-        //foreach (var file in Directory.GetFiles("Source/bin/Release"))
-        //    File.Copy(file, System.IO.Path.Combine(dist, System.IO.Path.GetFileName(file)));
+        foreach (var file in FileSystem.GetDirectory(@"Source\bin\Release").Files())
+            file.CopyTo(dist.GetFile(file.Name));
     }
 
     MSBuild40Task NewMSBuildTask()

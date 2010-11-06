@@ -22,7 +22,11 @@ namespace Pencil.Test.Stubs
             return dependencies;
         }
 
-		protected override IProject GetProjectCore(){ return project; }
+        protected override IProject Project
+        {
+            get { return project; }
+        }
+
         protected override void ExecuteCore() { ExecuteHandler(); }
 
         public override bool IsDefault

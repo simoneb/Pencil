@@ -10,7 +10,7 @@ namespace Pencil.Build
 	{
 		readonly Dictionary<string, Target> targets;
 		readonly HashSet<string> done = new HashSet<string>();
-		internal Logger logger = new Logger(TextWriter.Null);
+		internal Logger Logger = new Logger(TextWriter.Null);
 		readonly ZeptoContainer container = new ZeptoContainer();
 
 		public Project()
@@ -38,9 +38,9 @@ namespace Pencil.Build
 			if(done.Contains(targetName))
 				return;
 
-			logger.Write("{0}:", targetName);
+			Logger.Write("{0}:", targetName);
 
-			using(logger.Indent())
+			using(Logger.Indent())
 			{
 				RunCore(targetName);
 				done.Add(targetName);

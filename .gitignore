@@ -3,8 +3,9 @@
 *.userprefs
 *.user
 *.cache
+TestResult.xml
 obj/
 bin/
-/Dist/
+/dist/
 _ReSharper*/
 /Build/

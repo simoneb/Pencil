@@ -71,25 +71,21 @@ namespace Pencil.Test.Build.Tasks
             compiler.Output = outDir.Combine("Bar.dll");
             compiler.References.Add(new Path("Foo.dll"));
 
-            //fileSystem.DirectoryExistsHandler = x => true;
-            //fileSystem.FileExistsHandler = x => x.Equals(new Path("Foo.dll"));
-            //bool copied = false;
-            //fileSystem.CopyFileHandler = (from, to, overwrite) =>
-            //{
-            //    Assert.AreEqual(new Path("Foo.dll"), from);
-            //    Assert.AreEqual(outDir + "Foo.dll", to);
-            //    copied = true;
-            //};
+            fileSystem.GetDirectory(outDir.FullPath).MustExist();
+            fileSystem.GetFile("Foo.dll").MustExist();
             compiler.Execute();
 
-            //Assert.IsTrue(copied, "Referenced assembly not copied.");
+            Assert.IsTrue(fileSystem.GetFile(outDir.Combine("Foo.dll").FullPath).Exists);
         }
 
         [Test]
+        [Ignore("Can't run now with OpenFileSystem")]
         public void Wont_copy_referenced_assemblies_already_present()
         {
-            compiler.Output = new Path("Build").Combine("Bar.dll");
+            compiler.Output = new Path(@"Build\Bar.dll");
             compiler.References.Add(new Path("Foo.dll"));
+
+            fileSystem.GetFile(@"Build\Foo.dll").MustExist();
 
             //fileSystem.DirectoryExistsHandler = x => true;
             //fileSystem.FileExistsHandler = x => true;

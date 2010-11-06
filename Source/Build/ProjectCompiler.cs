@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Core;
+using Assembly = System.Reflection.Assembly;
 
 namespace Pencil.Build
 {
@@ -23,28 +24,31 @@ namespace Pencil.Build
 		public IProject ProjectFromFile(string path)
 		{
 			var result = codeProvider.CompileAssemblyFromFile(GetCompilerParameters(), path);
+
 			if(result.NativeCompilerReturnValue == 0)
-				return GetProject(result.CompiledAssembly.GetTypes());
+				return GetProject(result.CompiledAssembly);
+
 			throw new CompilationFailedException(result);
 		}
 
-		CompilerParameters GetCompilerParameters()
+		private CompilerParameters GetCompilerParameters()
 		{
 			var options = new CompilerParameters {GenerateExecutable = false, GenerateInMemory = true};
 		    referencedAssemblies.ForEach(x => options.ReferencedAssemblies.Add(x.ToString()));
 			return options;
 		}
 
-		IProject GetProject(IEnumerable<Type> types)
+	    private IProject GetProject(Assembly assembly)
 		{
-			foreach(var item in types)
+			foreach(var item in assembly.GetExportedTypes())
 				if(typeof(IProject).IsAssignableFrom(item))
 				{
-					var project = item.GetConstructor(Type.EmptyTypes).Invoke(null) as Project;
-					project.logger = logger;
+					var project = (Project)item.GetConstructor(Type.EmptyTypes).Invoke(null);
+					project.Logger = logger;
 					return project;
 				}
-			throw new InvalidOperationException(string.Format("{0} does not contain any Project."));
+
+			throw new InvalidOperationException(string.Format("{0} does not contain any Project.", assembly));
 		}
 	}
 }

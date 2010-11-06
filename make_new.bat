@@ -1,4 +1,5 @@
 @echo off
+pushd %~dp0
 color
 
 @Tools\Pencil.Build.exe Pencil_new.cs %*
@@ -14,4 +15,6 @@ rem Fail!, paint it red.
 	
 :done
 
+	popd
+	@pause
 	color

@@ -102,14 +102,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Pencil.Core.csproj">
-      <Project>{E5228228-0A0C-481D-9E4A-808485D70385}</Project>
-      <Name>Pencil.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -130,5 +122,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Pencil.Core.csproj">
+      <Project>{E5228228-0A0C-481D-9E4A-808485D70385}</Project>
+      <Name>Pencil.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

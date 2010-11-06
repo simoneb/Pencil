@@ -54,10 +54,6 @@
       <Project>{62B094FB-4868-4824-9B31-831B71254E2C}</Project>
       <Name>Pencil.Build</Name>
     </ProjectReference>
-    <ProjectReference Include="Pencil.Core.csproj">
-      <Project>{E5228228-0A0C-481D-9E4A-808485D70385}</Project>
-      <Name>Pencil.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

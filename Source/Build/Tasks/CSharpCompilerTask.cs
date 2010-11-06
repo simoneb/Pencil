@@ -25,8 +25,7 @@ namespace Pencil.Build.Tasks
 
 	    public CompilerVersion Version { get; set; }
 
-	    public CSharpCompilerTask(IFileSystem fileSystem, 
-            IExecutionEnvironment executionEnvironment): base(fileSystem, executionEnvironment)
+	    public CSharpCompilerTask(IFileSystem fileSystem, IExecutionEnvironment platform): base(fileSystem, platform)
 	    {
 	    }
 
@@ -63,7 +62,7 @@ namespace Pencil.Build.Tasks
 		{
 			if(Output == null)
 				throw new InvalidOperationException("Output path is null.");
-			References.CopyTo(Output);
+			References.CopyTo(FileSystem.GetFile(Output.FullPath).Parent.Path);
 			return CollectArguments();
 		}
 

@@ -13,7 +13,7 @@ namespace Pencil.Build
 		private void SatisfyDependencies()
 		{
 			foreach(var item in GetDependencies())
-				GetProjectCore().Run(item);
+				Project.Run(item);
 		}
 
 		public virtual IEnumerable<string> GetDependencies()
@@ -21,9 +21,9 @@ namespace Pencil.Build
 			return new string[0];
 		}
 
-		protected abstract IProject GetProjectCore();
+        protected abstract IProject Project { get; }
 
-		protected virtual void ExecuteCore(){}
+        protected virtual void ExecuteCore(){}
 
         public abstract bool IsDefault { get; }
 	}

@@ -1,3 +1,4 @@
+using System.Linq;
 using OpenFileSystem.IO;
 using OpenFileSystem.IO.FileSystem.Local;
 
@@ -42,28 +43,31 @@ namespace Pencil.Build
 
 		public void CopyTo(Path destination)
 		{
-            //fileSystem.EnsureDirectory(destination);
-            //foreach(var file in Items)
-            //{
-            //    var target = destination + file.GetFileName();
-            //    if(fileSystem.FileExists(target) || !fileSystem.FileExists(file))
-            //        return;
-            //    fileSystem.CopyFile(file, target, true);
-            //}
+            fileSystem.GetDirectory(destination.FullPath).MustExist();
+
+            foreach (var sourcePath in Items)
+            {
+                var source = fileSystem.GetFile(sourcePath.FullPath);
+                var target = fileSystem.GetDirectory(destination.FullPath).GetFile(source.Name);
+
+                if (target.Exists || !source.Exists)
+                    return;
+
+                source.CopyTo(target);
+            }
 		}
 
-		public bool ChangedAfter(DateTime timestamp)
+		public bool ChangedAfter(DateTime? timestamp)
 		{
-            //foreach(var item in Items)
-            //    if(fileSystem.GetLastWriteTime(item) > timestamp)
-            //        return true;
-		    return false;
+            if (!timestamp.HasValue)
+                return true;
+
+		    return Items.Any(item => fileSystem.GetFile(item.FullPath).LastModifiedTimeUtc > timestamp);
 		}
 
 		public bool ChangedAfter(Path path)
 		{
-            //return ChangedAfter(fileSystem.GetLastWriteTime(path));
-		    return false;
+            return ChangedAfter(fileSystem.GetFile(path.FullPath).LastModifiedTimeUtc);
 		}
 
 		public IEnumerator<Path> GetEnumerator(){ return items.GetEnumerator(); }
