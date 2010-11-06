@@ -1,7 +1,9 @@
+using System;
+using System.Net;
 using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Build;
 using Pencil.Build.Tasks;
-using Path = OpenFileSystem.IO.FileSystem.Local.Path;
 
 public class PencilProject : Project
 {
@@ -58,6 +60,52 @@ public class PencilProject : Project
 
         foreach (var file in FileSystem.GetDirectory(@"Source\bin\Release").Files())
             file.CopyTo(dist.GetFile(file.Name));
+    }
+
+    [DependsOn("Dist")]
+    public void ILMerge()
+    {
+        var ilmergeExe = @"Tools\ilmerge\SourceDir\ILMerge.exe";
+
+        if (!FileSystem.GetFile(ilmergeExe).Exists)
+            ExtractILMerge(DownloadILMerge(FileSystem.GetTempDirectory()), @"Tools\ilmerge");
+
+        RunILMerge(ilmergeExe, "merged");
+    }
+
+    private void RunILMerge(string ilmergeExe, string output)
+    {
+        FileSystem.GetDirectory(output).MustExist();
+
+        var commandLine = string.Format(@"/t:exe /xmldocs /out:{0}\Pencil.Build.exe {1}\Pencil.Build.exe {1}\Pencil.dll {1}\OpenFileSystem.dll",
+                                      output, "dist");
+
+        new ExecTask(FileSystem, Platform, new Path(ilmergeExe))
+        {
+            Arguments = commandLine,
+            ShowCommandLine = true
+        }.Execute();
+    }
+
+    private void ExtractILMerge(string msiPath, string destinationDirectory)
+    {
+        FileSystem.GetDirectory(destinationDirectory).MustExist();
+
+        new ExecTask(FileSystem, Platform, new Path(@"Tools\lessmsi\lessmsi.exe"))
+        {
+            Arguments = "/x " + msiPath + " " + destinationDirectory,
+            ShowCommandLine = true
+        }.Execute();
+    }
+
+    private string DownloadILMerge(IDirectory destination)
+    {
+        var destinationFile = destination.GetFile(Guid.NewGuid() + ".msi").Path.FullPath;
+
+        using (var c = new WebClient())
+            c.DownloadFile("http://download.microsoft.com/download/1/3/4/1347C99E-9DFB-4252-8F6D-A3129A069F79/ILMerge.msi", destinationFile);
+
+        return destinationFile;
     }
 
     MSBuild40Task NewMSBuildTask()

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -67,7 +68,7 @@ namespace Pencil.Test.Core
             typeof(SampleType).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
                 .ForEach(x => viaReflection.Add(x.Name));
 
-            Assert.That(Wrap(typeof(SampleType)).Methods.Map(x => x.Name).ToList(), Is.EquivalentTo(viaReflection));
+            Assert.That(Wrap(typeof(SampleType)).Methods.Select(x => x.Name).ToList(), Is.EquivalentTo(viaReflection));
         }
 		[Test]
 		public void Should_have_readable_ToString()
@@ -97,27 +98,27 @@ namespace Pencil.Test.Core
 		[Test]
 		public void DependsOn_should_contain_method_argument_types()
 		{
-			DependentType.DependsOn.Map(x => x.Name).ShouldContain("TextWriter", "TextReader");
+			DependentType.DependsOn.Select(x => x.Name).ShouldContain("TextWriter", "TextReader");
 		}
 		[Test]
 		public void DependsOn_should_contain_return_value_types()
 		{
-			DependentType.DependsOn.Map(x => x.Name).ShouldContain("SampleType");
+			DependentType.DependsOn.Select(x => x.Name).ShouldContain("SampleType");
 		}
 		[Test]
 		public void DependsOn_should_contain_constructed_types()
 		{
-			DependentType.DependsOn.Map(x => x.Name).ShouldContain("StringBuilder");
+			DependentType.DependsOn.Select(x => x.Name).ShouldContain("StringBuilder");
 		}
 		[Test]
 		public void DependsOn_should_contain_called_types()
 		{
-			DependentType.DependsOn.Map(x => x.Name).ShouldContain("DateTime");
+			DependentType.DependsOn.Select(x => x.Name).ShouldContain("DateTime");
 		}
 		[Test]
 		public void DependsOn_should_contain_implemented_interface()
 		{
-			DependentType.DependsOn.Map(x => x.Name).ShouldContain("ISampleInterface");
+			DependentType.DependsOn.Select(x => x.Name).ShouldContain("ISampleInterface");
 		}
 		[Test]
 		public void DependsOn_wont_have_duplicates()
@@ -144,7 +145,7 @@ namespace Pencil.Test.Core
         [Test]
         public void DependsOn_should_handle_automaticliy_initilized_members()
         {
-            Assert.That(Wrap(typeof(WithInitializer)).DependsOn.Map(x => x.Name).ToList(), Is.EquivalentTo(new[] { "IList`1", "List`1" }));
+            Assert.That(Wrap(typeof(WithInitializer)).DependsOn.Select(x => x.Name).ToList(), Is.EquivalentTo(new[] { "IList`1", "List`1" }));
         }
 		[Test]
 		public void Should_support_Equals_with_System_Type()
@@ -166,7 +167,7 @@ namespace Pencil.Test.Core
 		[Test]
 		public void DependsOn_should_not_return_interface_implemented_by_base()
 		{
-            Assert.That(Wrap(typeof(Derived)).DependsOn.Map(x => x.Name).ToList(),
+            Assert.That(Wrap(typeof(Derived)).DependsOn.Select(x => x.Name).ToList(),
 				Is.EquivalentTo(new[] { "Base" }));
 		}
 
@@ -177,7 +178,7 @@ namespace Pencil.Test.Core
 		[Test]
 		public void DependsOn_should_handle_nested_generics()
 		{
-            Assert.That(Wrap(typeof(Thing<>)).DependsOn.Map(x => x.FullName).ToList(),
+            Assert.That(Wrap(typeof(Thing<>)).DependsOn.Select(x => x.FullName).ToList(),
 				Is.EquivalentTo(new[] { "System.Collections.Generic.IEnumerable`1" }));
 		}
 
@@ -231,7 +232,7 @@ namespace Pencil.Test.Core
 		[Test]
 		public void NestedTypes_should_include_inner_classes()
 		{
-			Assert.That(Wrap(typeof(Outer)).NestedTypes.Map(x => x.Name).ToList(),
+			Assert.That(Wrap(typeof(Outer)).NestedTypes.Select(x => x.Name).ToList(),
 				Is.EquivalentTo(new[]{ "Nested"}));
 		}
     }

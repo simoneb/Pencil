@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Pencil.Test
 {
 	using System;

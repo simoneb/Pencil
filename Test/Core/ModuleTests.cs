@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Pencil.Core;
 
@@ -16,7 +17,7 @@ namespace Pencil.Test.Core
             System.Reflection.Assembly.GetExecutingAssembly().GetModules().ForEach(
                 x => x.GetTypes().ForEach(y => reflectedTypes.Add(y.Name)));
 
-            AssemblyLoader.GetExecutingAssembly().Modules.ForEach(m => types.AddRange(m.Types.Map(t => t.Name)));
+            AssemblyLoader.GetExecutingAssembly().Modules.ForEach(m => types.AddRange(m.Types.Select(t => t.Name)));
 
             Assert.That(types, Is.EquivalentTo(reflectedTypes));
         }

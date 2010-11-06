@@ -1,4 +1,6 @@
-﻿namespace Pencil.Test.Core
+﻿using System.Linq;
+
+namespace Pencil.Test.Core
 {
     using Pencil.Core;
     using NUnit.Framework;
@@ -18,7 +20,7 @@
 			var expected = new[]{ "nop", "break", "ldnull" };
             var ir = new InstructionReader(this, il);
             var result = new List<Instruction>(ir.ReadToEnd());
-            Assert.That(result.Map(x => x.ToString()).ToList(), Is.EquivalentTo(expected));
+            Assert.That(result.Select(x => x.ToString()).ToList(), Is.EquivalentTo(expected));
 		}
 
 		void CheckDecode(string expected, params byte[] il)
@@ -42,7 +44,7 @@
             var body = new PencilMethodBody(module.GetMethod("Return42"));
             var actual = body.DecodeBody(new DefaultTypeLoader());
 
-            Assert.That(actual.Map(x => x.ToString()).ToList(), Is.EquivalentTo(expected));
+            Assert.That(actual.Select(x => x.ToString()).ToList(), Is.EquivalentTo(expected));
         }
 
         void SetResolveToken(string token)

@@ -31,7 +31,10 @@ namespace Pencil.Build.Tasks
             var arguments = GetArgumentsCore();
 
             if(ShowCommandLine)
-                Platform.StandardOut.WriteLine("Running {0} {1} in folder {2}", fileName, arguments, Platform.CurrentDirectory);
+            {
+                Platform.StandardOut.WriteLine("Starting {0} {1}", fileName, arguments);
+                Platform.StandardOut.WriteLine("in directory {0}", Platform.CurrentDirectory);
+            }
 
             Platform.Run(fileName, arguments, task =>
                                               {

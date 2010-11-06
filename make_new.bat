@@ -1,10 +1,10 @@
 @echo off
+cls
 pushd %~dp0
-color
 
-@Tools\Pencil.Build.exe Pencil_new.cs %*
+@Tools\Pencil.Build.exe -r:System.dll Pencil_new.cs %*
 
-if ERRORLEVEL 1 goto error
+if NOT ERRORLEVEL = 0 goto error
 
 rem Success, paint it green.
 	color 2F

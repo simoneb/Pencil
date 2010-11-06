@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Pencil.Test.Core
 {
 	using System;
@@ -14,14 +16,14 @@ using System.Reflection;
 		public void Calls_should_contain_called_methods()
 		{
 			var method = GetMyMethod();
-			Assert.That(method.Calls.Map(x => x.Name).ToList(),
+			Assert.That(method.Calls.Select(x => x.Name).ToList(),
 				Is.EquivalentTo(new []{ "DoStuff", "get_Now", "AddDays", "WriteLine" }));
 		}
         [Test]
         public void Arguments_should_contain_all_method_arguments()
         {
             var method = GetMethod(GetType().GetMethod("DoStuff", new[]{ typeof(int), typeof(string)}));
-            Assert.That(method.Arguments.Map(x => x.Type.Name).ToList(),
+            Assert.That(method.Arguments.Select(x => x.Type.Name).ToList(),
                 Is.EquivalentTo(new[]{ "Int32", "String" }));
         }
 		[Test]

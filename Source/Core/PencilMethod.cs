@@ -57,7 +57,7 @@ namespace Pencil.Core
 		public IType DeclaringType { get { return typeLoader.FromNative(method.DeclaringType); } }
 
         public ICollection<IMethodArgument> Arguments {
-            get { return method.GetParameters().Map<ParameterInfo, IMethodArgument>(typeLoader.FromNative).ToList(); }
+            get { return method.GetParameters().Select<ParameterInfo, IMethodArgument>(typeLoader.FromNative).ToList(); }
         }
 
         public IEnumerable<Instruction> Body { get { return body.DecodeBody(typeLoader); } }

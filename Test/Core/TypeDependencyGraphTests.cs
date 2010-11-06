@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Pencil.Test.Core
 {
 	using NUnit.Framework;
@@ -19,7 +21,7 @@ namespace Pencil.Test.Core
 			var graph = new TypeDependencyGraph(digraph);
 			graph.Add(new TypeStub("MyType"));
 
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType" }));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType" }));
 		}
 		[Test]
 		public void Add_should_create_nodes_for_dependencies()
@@ -28,7 +30,7 @@ namespace Pencil.Test.Core
 			var graph = new TypeDependencyGraph(digraph);
 			graph.Add(new TypeStub("MyType"){ GetDependsOnHandler = () => new[]{new TypeStub("DateTime") } });
 
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType", "DateTime" }));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType", "DateTime" }));
 		}
 		[Test]
 		public void Add_should_create_edges_between_dependencies()
@@ -40,7 +42,7 @@ namespace Pencil.Test.Core
 				new TypeStub("DateTime"), new TypeStub("Object")
 			} });
 
-            Assert.That(digraph.Edges.Map(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "0->2" }));
+            Assert.That(digraph.Edges.Select(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "0->2" }));
 		}
 		[Test]
 		public void Should_ignore_generated_types()
@@ -61,7 +63,7 @@ namespace Pencil.Test.Core
 				new TypeStub("Generated"){ GetIsGeneratedHandler = () => true }
 			}});
 
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType" }));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType" }));
 		}
 		[Test]
 		public void Should_support_filtering()
@@ -84,7 +86,7 @@ namespace Pencil.Test.Core
 			var digraph = EmptyGraph();
 			var graph = new TypeDependencyGraph(digraph);
 			graph.Add(TypeLoader.FromNative(typeof(MyType)));
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType", "DateTime" }));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ "MyType", "DateTime" }));
 		}
 
         class TypeWithArray
@@ -98,7 +100,7 @@ namespace Pencil.Test.Core
             var digraph = EmptyGraph();
             var graph = new TypeDependencyGraph(digraph);
             graph.Add(TypeLoader.FromNative(typeof(TypeWithArray)));
-            Assert.That(digraph.Edges.Map(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1" }));
+            Assert.That(digraph.Edges.Select(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1" }));
         }
 
 		class EmptyType {}

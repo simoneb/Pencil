@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using SystemType = System.Type;
 
@@ -56,8 +57,8 @@ namespace Pencil.Core
 				return elementType == null ? this : typeLoader.FromNative(elementType);
 			}
 		}
-        public IEnumerable<IMethod> Methods { get { return type.GetMethods(AnyBinding).Map<MethodInfo, IMethod>(typeLoader.FromNative); } }
-        public IEnumerable<IField> Fields { get { return type.GetFields(AnyBinding).Map<FieldInfo, IField>(typeLoader.FromNative); } }
+        public IEnumerable<IMethod> Methods { get { return type.GetMethods(AnyBinding).Select(typeLoader.FromNative); } }
+        public IEnumerable<IField> Fields { get { return type.GetFields(AnyBinding).Select(typeLoader.FromNative); } }
 		public ICollection<IType> DependsOn
 		{
 			get
@@ -74,9 +75,9 @@ namespace Pencil.Core
 						dependsOn.Add(typeLoader.FromNative(x));
 				});
                 type.GetFields(AnyBinding).ForEach(x => { if(x.DeclaringType == type) dependsOn.Add(typeLoader.FromNative(x.FieldType)); });
-				EachOwnMethod(m => m.Arguments.Map(a => a.Type).ForEach(dependsOn.Add));
+				EachOwnMethod(m => m.Arguments.Select(a => a.Type).ForEach(dependsOn.Add));
 				EachOwnMethod(m => dependsOn.Add(m.ReturnType));
-				EachOwnMethod(m => m.Calls.ForEach(x =>{ dependsOn.Add(x.DeclaringType);}));
+				EachOwnMethod(m => m.Calls.ForEach(x => dependsOn.Add(x.DeclaringType)));
 				return dependsOn.Types;
 			}
 		}
@@ -85,7 +86,7 @@ namespace Pencil.Core
 			get
 			{
 				return type.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)
-				.Map(x => typeLoader.FromNative(x));
+				.Select(x => typeLoader.FromNative(x));
 			}
 		}
 

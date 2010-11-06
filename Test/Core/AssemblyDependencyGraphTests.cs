@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Pencil.Test.Core
 {
     using System;
@@ -27,7 +29,7 @@ namespace Pencil.Test.Core
 
 			graph.Add(assembly);
 
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ assembly.Name.Name}));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ assembly.Name.Name}));
 		}
 		[Test]
 		public void Should_support_filter()
@@ -38,7 +40,7 @@ namespace Pencil.Test.Core
 			var assembly = GetAssemblyDependingOnSystem();
 			graph.Add(assembly);
 
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ assembly.Name.Name}));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ assembly.Name.Name}));
 		}
 
 		IAssembly GetAssemblyDependingOnSystem()
@@ -68,7 +70,7 @@ namespace Pencil.Test.Core
 			var assembly = new AssemblyStub("MyAssembly");
 			graph.Add(assembly);
 
-			Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[]{ assembly.Name.Name}));
+			Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[]{ assembly.Name.Name}));
 		}
 		[Test]
 		public void Should_add_referenced_assemblies()
@@ -83,7 +85,7 @@ namespace Pencil.Test.Core
 
 			graph.Add(root);
 
-            Assert.That(digraph.Nodes.Map(x => x.Label).ToList(), Is.EquivalentTo(new[] { root.Name.Name, child1.Name, child2.Name }));
+            Assert.That(digraph.Nodes.Select(x => x.Label).ToList(), Is.EquivalentTo(new[] { root.Name.Name, child1.Name, child2.Name }));
 		}
         [Test]
         public void Should_add_edges_from_dependant_to_dependee()
@@ -98,7 +100,7 @@ namespace Pencil.Test.Core
 
             graph.Add(root);
 
-            Assert.That(digraph.Edges.Map(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "0->2" }));
+            Assert.That(digraph.Edges.Select(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "0->2" }));
         }
 		[Test]
         public void Wont_add_children_twice()
@@ -113,7 +115,7 @@ namespace Pencil.Test.Core
             graph.Add(parent);
             graph.Add(parent);
 
-            Assert.That(digraph.Edges.Map(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1" }));
+            Assert.That(digraph.Edges.Select(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1" }));
         }
         [Test]
         public void Should_not_add_same_assembly_twice()
@@ -130,7 +132,7 @@ namespace Pencil.Test.Core
             graph.Add(root1);
             graph.Add(root2);
 
-            Assert.That(digraph.Edges.Map(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "2->1" }));
+            Assert.That(digraph.Edges.Select(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "2->1" }));
         }
 		[Test]
 		public void Should_load_referenced_assemblies()
@@ -147,7 +149,7 @@ namespace Pencil.Test.Core
 
 			graph.Add(root);
 
-			Assert.That(loaded.Map(x => x.Name).ToList(), Is.EquivalentTo(new[] { system.Name, systemXml.Name }));
+			Assert.That(loaded.Select(x => x.Name).ToList(), Is.EquivalentTo(new[] { system.Name, systemXml.Name }));
 		}
 		[Test]
 		public void Should_follow_dependency_chain()
@@ -168,7 +170,7 @@ namespace Pencil.Test.Core
 
 			graph.Add(root);
 
-			Assert.That(loaded.Map(x => x.Name).ToList(), Is.EquivalentTo(new[] { system.Name, systemXml.Name.Name }));
+			Assert.That(loaded.Select(x => x.Name).ToList(), Is.EquivalentTo(new[] { system.Name, systemXml.Name.Name }));
 		}
 		[Test]
         public void Should_handle_circular_dependencies()
@@ -188,7 +190,7 @@ namespace Pencil.Test.Core
 
             graph.Add(system);
 
-            Assert.That(digraph.Edges.Map(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "1->0" }));
+            Assert.That(digraph.Edges.Select(x => x.ToString()).ToList(), Is.EquivalentTo(new[] { "0->1", "1->0" }));
         }
 	}
 }

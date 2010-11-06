@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Pencil.Core
@@ -18,7 +18,7 @@ namespace Pencil.Core
 
         public IEnumerable<IType> Types
         {
-            get { return module.GetTypes().Map<System.Type, IType>(typeLoader.FromNative); }
+            get { return module.GetTypes().Select(typeLoader.FromNative); }
         }
     }
 }

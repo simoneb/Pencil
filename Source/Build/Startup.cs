@@ -1,3 +1,4 @@
+using System.Linq;
 using OpenFileSystem.IO.FileSystem.Local;
 
 namespace Pencil.Build
@@ -37,15 +38,15 @@ namespace Pencil.Build
 		public static IEnumerable<Path> GetReferencedAssemblies(IEnumerable<string> args)
 		{
 			yield return new Path(Assembly.GetExecutingAssembly().Location);
-			yield return new Path(Assembly.GetAssembly(typeof(Path)).Location);
-			foreach(var item in args)
+
+            foreach(var item in args)
 				if("-r:".IsStartOf(item))
 					yield return new Path(item.Substring("-r:".Length));
 		}
 
-		public static string[] GetArguments(string[] args)
+		public static string[] GetArguments(IEnumerable<string> args)
 		{
-			return new List<string>(args.Filter(x => !x.StartsWith("-"))).ToArray();
+			return new List<string>(args.Where(x => !x.StartsWith("-"))).ToArray();
 		}
 	}
 }

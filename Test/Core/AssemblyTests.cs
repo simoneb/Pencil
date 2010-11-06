@@ -1,4 +1,6 @@
-﻿namespace Pencil.Test.Core
+﻿using System.Linq;
+
+namespace Pencil.Test.Core
 {
     using NUnit.Framework;
     using ReflectionAssembly = System.Reflection.Assembly;
@@ -18,8 +20,8 @@
         public void Should_return_same_modules_as_reflection()
         {
             Assert.That(
-                AssemblyLoader.GetExecutingAssembly().Modules.Map(x => x.Name).ToList(), 
-                Is.EquivalentTo(ReflectionAssembly.GetExecutingAssembly().GetModules().Map(x => x.Name).ToList()));
+                AssemblyLoader.GetExecutingAssembly().Modules.Select(x => x.Name).ToList(), 
+                Is.EquivalentTo(ReflectionAssembly.GetExecutingAssembly().GetModules().Select(x => x.Name).ToList()));
         }
     }
 }
