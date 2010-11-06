@@ -12,12 +12,12 @@ namespace Pencil.Build.Tasks
 	        this.program = program;
 	    }
 
-	    protected override Path GetProgramCore()
+	    public override Path Program
 	    {
-	        return program;
+	        get { return program; }
 	    }
 
-	    protected override string GetArgumentsCore()
+	    protected override string GetArguments()
 	    {
 	        return Arguments;
 	    }

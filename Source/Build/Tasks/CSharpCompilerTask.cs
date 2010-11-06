@@ -29,13 +29,16 @@ namespace Pencil.Build.Tasks
 	    {
 	    }
 
-	    protected override Path GetProgramCore()
-		{
-			if(IsRunningOnMono)
-				return RuntimeDirectory.GetFile("gmcs.exe").Path;
+	    public override Path Program
+	    {
+	        get
+	        {
+	            if (IsRunningOnMono)
+	                return RuntimeDirectory.GetFile("gmcs.exe").Path;
 
-			return CompilerDirectory.Combine("csc.exe");
-		}
+	            return CompilerDirectory.Combine("csc.exe");
+	        }
+	    }
 
 	    private Path CompilerDirectory
 	    {
@@ -58,11 +61,13 @@ namespace Pencil.Build.Tasks
 	        return RuntimeDirectory.Parent.Directories(folderPrefix + "*").FirstOrDefault().Path;
 	    }
 
-	    protected override string GetArgumentsCore()
+	    protected override string GetArguments()
 		{
 			if(Output == null)
 				throw new InvalidOperationException("Output path is null.");
+
 			References.CopyTo(FileSystem.GetFile(Output.FullPath).Parent.Path);
+
 			return CollectArguments();
 		}
 
@@ -72,8 +77,10 @@ namespace Pencil.Build.Tasks
             	.AppendFormat(" /out:{0}", Output)
             	.AppendFormat(" /debug{0}", Debug ? "+" : "-")
             	.AppendFormat(" /target:{0}", GetTargetType());
+
             if(Optimize)
             	arguments.Append(" /optimize+");
+
             using(var r = References.GetEnumerator())
             {
                 if(r.MoveNext())
@@ -81,8 +88,10 @@ namespace Pencil.Build.Tasks
                 while(r.MoveNext())
                     arguments.AppendFormat(",{0}", r.Current);
             }
+
             foreach(var x in Sources.Items)
     			arguments.AppendFormat(" {0}", x);
+
 			return arguments.ToString();
         }
 

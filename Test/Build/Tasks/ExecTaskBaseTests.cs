@@ -6,8 +6,7 @@ namespace Pencil.Test.Build.Tasks
 {
     using Pencil.Build;
     using Pencil.Build.Tasks;
-    using Pencil.IO;
-    using Pencil.Test.Stubs;
+    using Stubs;
     using NUnit.Framework;
     
     [TestFixture]
@@ -17,8 +16,13 @@ namespace Pencil.Test.Build.Tasks
         {
             public TestTask(IFileSystem fileSystem, IExecutionEnvironment platform): base(fileSystem, platform)
             {}
-            protected override Path GetProgramCore(){ return new Path("TestTask"); }
-		    protected override  string GetArgumentsCore(){ return string.Empty; }
+
+            public override Path Program
+            {
+                get { return new Path("TestTask"); }
+            }
+
+            protected override  string GetArguments(){ return string.Empty; }
         }
     
         [Test]

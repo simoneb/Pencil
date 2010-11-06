@@ -1,82 +1,44 @@
 ﻿using System;
-using System.Text;
 using OpenFileSystem.IO;
 
 namespace Pencil.Build.Tasks
 {
     public abstract class MSBuild3540Task : MSBuildTask
     {
-        private int maxCpuCount;
-        private bool setMaxCpuCount;
-        private MSBuildToolsVersion toolsVersion;
-        private bool setToolsVersion;
-        private bool nodeReuse;
-        private bool setNodeReuse;
-
         protected MSBuild3540Task(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
         }
 
-        public int MaxCpuCount
-        {
-            get { return maxCpuCount; }
-            set
-            {
-                setMaxCpuCount = true;
-                maxCpuCount = value;
-            }
-        }
+        public int? MaxCpuCount { get; set; }
 
-        public MSBuildToolsVersion ToolsVersion
-        {
-            get {
-                return toolsVersion;
-            }
-            set
-            {
-                setToolsVersion = true;
-                toolsVersion = value;
-            }
-        }
+        public MSBuildToolsVersion? ToolsVersion { get; set; }
 
-        private string PickToolsVersion
-        {
-            get {
-                switch (ToolsVersion)
-                {
-                    case MSBuildToolsVersion.v20:
-                        return "2.0";
-                    case MSBuildToolsVersion.v30:
-                        return "3.0";
-                    case MSBuildToolsVersion.v35:
-                        return "3.5";
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
+        public bool? NodeReuse { get; set; }
 
-        public bool NodeReuse
+        private string PickToolsVersion()
         {
-            get {
-                return nodeReuse;
-            }
-            set
+            switch (ToolsVersion)
             {
-                setNodeReuse = true;
-                nodeReuse = value;
+                case MSBuildToolsVersion.v20:
+                    return "2.0";
+                case MSBuildToolsVersion.v30:
+                    return "3.0";
+                case MSBuildToolsVersion.v35:
+                    return "3.5";
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
         protected override void AppendAdditionalArguments(CommandLineBuilder builder)
         {
-            if (setMaxCpuCount)
+            if (MaxCpuCount.HasValue)
                 builder.Append("maxcpucount", MaxCpuCount);
 
-            if(setToolsVersion)
-                builder.Append("toolsversion", PickToolsVersion);
+            if (ToolsVersion.HasValue)
+                builder.Append("toolsversion", PickToolsVersion());
 
-            if (setNodeReuse)
+            if (NodeReuse.HasValue)
                 builder.Append("nodeReuse", NodeReuse);
         }
     }

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using OpenFileSystem.IO;
-using OpenFileSystem.IO.FileSystem.Local;
+﻿using OpenFileSystem.IO;
 
 namespace Pencil.Build.Tasks
 {
@@ -10,9 +8,9 @@ namespace Pencil.Build.Tasks
         {
         }
 
-        protected override Path GetMSBuildPath()
+        protected override string FrameworkDirectorySearchPattern
         {
-            return FrameworksDirectory.Directories("v3.5*").First().GetFile("msbuild.exe").Path;
+            get { return "v3.5*"; }
         }
     }
 }

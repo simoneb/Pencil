@@ -12,11 +12,6 @@ namespace Pencil.Build.Tasks
         protected IFileSystem FileSystem { get; private set; }
         protected IExecutionEnvironment Platform { get; private set; }
 
-        public Path Program
-        {
-            get { return GetProgramCore(); }
-        }
-
         protected ExecTaskBase(IFileSystem fileSystem, IExecutionEnvironment platform)
         {
             FileSystem = fileSystem;
@@ -28,7 +23,7 @@ namespace Pencil.Build.Tasks
         public void Execute()
         {
             var fileName = Program.ToString();
-            var arguments = GetArgumentsCore();
+            var arguments = GetArguments();
 
             if(ShowCommandLine)
             {
@@ -58,7 +53,7 @@ namespace Pencil.Build.Tasks
             get { return FileSystem.GetDirectory(RuntimeEnvironment.GetRuntimeDirectory()); }
         }
 
-        protected abstract Path GetProgramCore();
-        protected abstract string GetArgumentsCore();
+        public abstract Path Program { get; }
+        protected abstract string GetArguments();
     }
 }

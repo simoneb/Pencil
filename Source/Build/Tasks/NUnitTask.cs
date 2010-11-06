@@ -24,12 +24,12 @@ namespace Pencil.Build.Tasks
         public bool ShadowCopy { get; set; }
         public bool ShowLogo { get; set; }
 
-        protected override Path GetProgramCore()
+        public override Path Program
         {
-            return IsRunningOnMono ? new Path("mono") : NUnitPath;
+            get { return IsRunningOnMono ? new Path("mono") : NUnitPath; }
         }
 
-        protected override string GetArgumentsCore()
+        protected override string GetArguments()
         {
             var args = new StringBuilder(IsRunningOnMono ? NUnitPath.ToString() : string.Empty);
 

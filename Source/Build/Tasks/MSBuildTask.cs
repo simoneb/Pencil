@@ -16,37 +16,34 @@ namespace Pencil.Build.Tasks
         public string ProjectFile { get; set; }
         public string[] Targets { get; set; }
         private IList<KeyValuePair<string, string>> Properties { get; set; }
-        private MSBuildVerbosity verbosity;
-        private bool setVerbosity;
 
         public void AddProperty(string name, string value)
         {
             Properties.Add(new KeyValuePair<string, string>(name, value));
         }
 
-        public MSBuildVerbosity Verbosity
-        {
-            get { return verbosity; }
-            set
-            {
-                setVerbosity = true;
-                verbosity = value;
-            }
-        }
+        public MSBuildVerbosity? Verbosity { get; set; }
 
         protected IDirectory FrameworksDirectory
         {
             get { return RuntimeDirectory.Parent; }
         }
 
-        protected override sealed Path GetProgramCore()
+        public override Path Program
         {
-            return GetMSBuildPath();
+            get { return MSBuildPath; }
         }
 
-        protected abstract Path GetMSBuildPath();
+        private Path MSBuildPath
+        {
+            get
+            {
+                return FrameworksDirectory.Directories(FrameworkDirectorySearchPattern).First().GetFile("msbuild.exe").Path;
+            }
+        }
+        protected abstract string FrameworkDirectorySearchPattern { get; }
 
-        protected override string GetArgumentsCore()
+        protected override string GetArguments()
         {
             var builder = new CommandLineBuilder();
 
@@ -54,9 +51,9 @@ namespace Pencil.Build.Tasks
                 builder.Append("target", string.Join(";", Targets));
 
             foreach (var property in Properties)
-                builder.Append("property", property.Key + "=" + property.Value);
+                builder.Append("property", string.Format("{0}={1}", property.Key, property.Value));
 
-            if(setVerbosity)
+            if(Verbosity.HasValue)
                 builder.Append("verbosity", Verbosity.ToString().ToLowerInvariant());
 
             builder.Append(ProjectFile ?? GetFirstSolutionInCurrentDir());
@@ -71,6 +68,6 @@ namespace Pencil.Build.Tasks
             return FileSystem.GetDirectory(".").Files("*.sln").Select(file => file.ToString()).FirstOrDefault();
         }
 
-        protected abstract void AppendAdditionalArguments(CommandLineBuilder builder);
+        protected virtual void AppendAdditionalArguments(CommandLineBuilder builder){}
     }
 }
