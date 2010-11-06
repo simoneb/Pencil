@@ -26,5 +26,7 @@ namespace Pencil.Build
         protected abstract void ExecuteCore();
 
         public abstract bool IsDefault { get; }
+
+        public abstract string Name { get; }
 	}
 }

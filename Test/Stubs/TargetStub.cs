@@ -33,5 +33,10 @@ namespace Pencil.Test.Stubs
         {
             get { throw new NotImplementedException(); }
         }
+
+        public override string Name
+        {
+            get { return GetType().Name; }
+        }
     }
 }

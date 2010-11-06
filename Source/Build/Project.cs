@@ -2,6 +2,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using OpenFileSystem.IO;
 
 namespace Pencil.Build
 {
@@ -23,6 +24,9 @@ namespace Pencil.Build
             get { return targets.FirstOrDefault(t => t.Value.IsDefault).Key; }
 	    }
 
+        protected IFileSystem FileSystem { get { return New<IFileSystem>(); } }
+        protected IExecutionEnvironment Platform { get { return New<IExecutionEnvironment>(); } }
+
 	    public T New<T>()
 		{
 			return container.Get<T>();
@@ -38,18 +42,21 @@ namespace Pencil.Build
 			if(done.Contains(targetName))
 				return;
 
-			Logger.Write("{0}:", targetName);
+		    var target = targets[targetName];
+		    var realTargetName = target.Name;
+
+		    Logger.Write("{0}:", realTargetName);
 
 			using(Logger.Indent())
 			{
-				RunCore(targetName);
+                RunCore(target);
 				done.Add(targetName);
 			}
 		}
 
-		protected virtual void RunCore(string targetName)
+		protected virtual void RunCore(Target target)
 		{
-			targets[targetName].Execute();
+			target.Execute();
 		}
 
 		public void Register<T>(T instance){ container.Register(typeof(T), instance); }

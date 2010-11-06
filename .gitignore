@@ -9,3 +9,5 @@ bin/
 /dist/
 _ReSharper*/
 /Build/
+Tools/ilmerge
+/merged

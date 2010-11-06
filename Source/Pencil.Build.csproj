@@ -63,6 +63,7 @@
     <Compile Include="Build\Annotations\Annotations.cs" />
     <Compile Include="Build\DefaultAttribute.cs" />
     <Compile Include="Build\DependsOnAttribute.cs" />
+    <Compile Include="Build\DuplicateTargetException.cs" />
     <Compile Include="Build\ExecutionEnvironment.cs" />
     <Compile Include="Build\IExecutionEnvironment.cs" />
     <Compile Include="Build\IProcess.cs" />

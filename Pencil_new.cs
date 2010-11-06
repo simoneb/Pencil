@@ -7,9 +7,6 @@ using Pencil.Build.Tasks;
 
 public class PencilProject : Project
 {
-	IFileSystem FileSystem { get { return New<IFileSystem>(); } }
-	IExecutionEnvironment Platform { get { return New<IExecutionEnvironment>(); } }
-
     [DependsOn("Clean")]
 	public void Build()
 	{
@@ -41,10 +38,10 @@ public class PencilProject : Project
     public void Test()
     {
         new NUnitTask(FileSystem, Platform)
-                    {
-                        NUnitBinPath = new Path(@"Tools\NUnit"),
-                        Target = new Path(@"Test\bin\Release\Pencil.Test.dll")
-                    }.Execute();
+        {
+            NUnitBinPath = new Path(@"Tools\NUnit"),
+            Target = new Path(@"Test\bin\Release\Pencil.Test.dll")
+        }.Execute();
     }
 
     [DependsOn("Build")]
@@ -65,7 +62,7 @@ public class PencilProject : Project
     [DependsOn("Dist")]
     public void ILMerge()
     {
-        var ilmergeExe = @"Tools\ilmerge\SourceDir\ILMerge.exe";
+        const string ilmergeExe = @"Tools\ilmerge\SourceDir\ILMerge.exe";
 
         if (!FileSystem.GetFile(ilmergeExe).Exists)
             ExtractILMerge(DownloadILMerge(FileSystem.GetTempDirectory()), @"Tools\ilmerge");

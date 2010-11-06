@@ -17,23 +17,15 @@ namespace Pencil.Test.Build
 			Assert.IsNotNull(project.New<CSharpCompilerTask>());
 		}
 
-		public class DoubleBuildBug : Project
+		public class DoubleBuildBug : SpyProject
 		{
-			public Action<string> RunHandler;
-
 		    public void Core(){}
-			
-            [DependsOn("Core")]
-			public void Build(){}
-			
-            [DependsOn("Build"), DependsOn("Core")]
-			public void Test(){}
 
-			protected override void RunCore(string targetName)
-			{
-				RunHandler(targetName);
-				base.RunCore(targetName);
-			}
+		    [DependsOn("Core")]
+			public void Build(){}
+
+		    [DependsOn("Core"), DependsOn("Build")]
+		    public void Test(){}
 		}
 
         class WithDefaultTarget : Project
@@ -46,15 +38,53 @@ namespace Pencil.Test.Build
             public void Release() {}
         }
 
+        class NoAmbiguities : SpyProject
+        {
+            public void Build(){}
+            public void Test(){}
+        }
+
+        class CaseAmbiguities : SpyProject
+        {
+            public void build(){}
+            public void Build(){}
+        }
+
 		[Test]
 		public void Wont_runt_same_target_multiple_times()
 		{
 			var targetsBuilt = new List<string>();
 			var project = new DoubleBuildBug();
-			project.RunHandler += targetsBuilt.Add;
+			project.RunHandler += target =>  targetsBuilt.Add(target.Name);
 			project.Run("Test");
 			Assert.That(targetsBuilt, Is.EquivalentTo(new[]{ "Test", "Core", "Build" }));
 		}
+
+        [Test]
+        public void Target_names_are_case_insensitive()
+        {
+            var targetsBuilt = new List<string>();
+            var project = new NoAmbiguities();
+            project.RunHandler += target => targetsBuilt.Add(target.Name);
+            project.Run("build");
+            Assert.That(targetsBuilt, Is.EquivalentTo(new[] { "Build" }));
+        }
+
+        [Test]
+        public void Should_not_build_target_twice_due_to_case_sensitivities_issues()
+        {
+            var targetsBuilt = new List<string>();
+            var project = new DoubleBuildBug();
+            project.RunHandler += target => targetsBuilt.Add(target.Name);
+            project.Run("test");
+            Assert.That(targetsBuilt, Is.EquivalentTo(new[] { "Test", "Core", "Build" }));
+        }
+
+        [Test]
+        public void Should_throw_if_targets_differ_by_case()
+        {
+           Assert.Throws<DuplicateTargetException>(() => new CaseAmbiguities(), "Target names are case insensitive, duplicates not allowed ('Build', 'build')");
+        }
 
         [Test]
         public void Default_target_should_be_null_if_no_default_target_specified()
@@ -68,4 +98,15 @@ namespace Pencil.Test.Build
             Assert.AreEqual("Build", new WithDefaultTarget().DefaultTarget);
         }
 	}
+
+    public class SpyProject : Project
+    {
+        public Action<Target> RunHandler = ignored => {};
+
+        protected override void RunCore(Target target)
+        {
+            RunHandler(target);
+            base.RunCore(target);
+        }
+    }
 }

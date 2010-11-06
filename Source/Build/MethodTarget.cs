@@ -43,5 +43,10 @@ namespace Pencil.Build
         {
             get { return method.IsDefined(typeof (DefaultAttribute), false); }
         }
+
+        public override string Name
+        {
+            get { return method.Name; }
+        }
     }
 }
