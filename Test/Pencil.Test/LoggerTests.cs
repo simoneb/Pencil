@@ -15,8 +15,9 @@ namespace Pencil.Test
 			using(logger.Indent())
 				logger.Write("2");
 			logger.Write("3");
-			Assert.AreEqual(string.Format("1{0}    2{0}3{0}", output.NewLine), output.ToString());
+			Assert.AreEqual(string.Format("1{0}   2{0}3{0}", output.NewLine), output.ToString());
 		}
+
 		[Test]
 		public void Write_should_support_formatting()
 		{

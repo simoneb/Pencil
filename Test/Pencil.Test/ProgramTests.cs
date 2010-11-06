@@ -14,6 +14,7 @@ namespace Pencil.Test
         {
             var project = new ProjectStub();
             project.HasTargetHandler = x => false;
+           
             Assert.That(Program.BuildTarget(project, "Target"), Is.EqualTo(Program.Failure));
         }
 
@@ -22,6 +23,7 @@ namespace Pencil.Test
         {
             var project = new ProjectStub();
             project.HasTargetHandler = x => true;
+
             Assert.That(Program.BuildTarget(project, "Target"), Is.EqualTo(Program.Success));
         }
 
@@ -67,7 +69,7 @@ namespace Pencil.Test
         }
 
         [Test]
-        public void Should_not_build_default_target_is_explicit_targets_are_supplied()
+        public void Should_not_build_default_target_if_explicit_targets_are_supplied()
         {
             var project = new ProjectStub();
             var built = new List<string>();
@@ -79,6 +81,39 @@ namespace Pencil.Test
 
             Assert.That(built, Contains.Item("Target1").And.Contains("Target2"));
             CollectionAssert.DoesNotContain(built, "Default");
+        }
+
+        [Test]
+        public void Project_should_have_its_source_scripts_folder_as_current_directory()
+        {
+            var project = new ProjectStub
+                          {
+                              HasTargetHandler = x => true,
+                              PlatformHandler = () => new ExecutionEnvironmentStub()
+                          };
+
+            string projectCurrentDirectory = null;
+            project.RunHandler = s => projectCurrentDirectory = project.Platform.CurrentDirectory;
+            
+            new Program(Logger.Null, x => project).Run(new[] { @"path\to\BuildFile", "whatever" });
+
+            StringAssert.EndsWith(@"path\to", projectCurrentDirectory);
+        }
+
+        [Test]
+        public void Original_current_directory_should_be_restored_when_finished()
+        {
+            var project = new ProjectStub
+                          {
+                              HasTargetHandler = x => true,
+                              PlatformHandler = () => new ExecutionEnvironmentStub()
+                          };
+
+            var originalDirectory = project.Platform.CurrentDirectory;
+
+            new Program(Logger.Null, x => project).Run(new[] { @"path\to\BuildFile", "whatever" });
+
+            Assert.AreEqual(originalDirectory, project.Platform.CurrentDirectory);
         }
     }
 }

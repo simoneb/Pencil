@@ -64,7 +64,7 @@ public class PencilProject : Project
     }
 
     [DependsOn("Dist")]
-    public void ILMerge()
+    public void Merge()
     {
         const string ilmergeExe = @"Tools\ilmerge\SourceDir\ILMerge.exe";
 

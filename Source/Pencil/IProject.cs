@@ -1,3 +1,5 @@
+using OpenFileSystem.IO;
+
 namespace Pencil
 {
     public interface IProject
@@ -7,5 +9,7 @@ namespace Pencil
 		void Register<T>(T instance);
         bool HasDefaultTarget { get; }
         string DefaultTarget { get; }
+        IFileSystem FileSystem { get; }
+        IExecutionEnvironment Platform { get; }
     }
 }

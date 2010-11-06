@@ -25,20 +25,8 @@ namespace Pencil
 		public IDisposable Indent()
 		{
 			string old = indentation;
-			indentation = old + "    ";
-			return new Finally(() => indentation = old);
-		}
-
-		sealed class Finally : IDisposable
-		{
-		    readonly Action action;
-
-			public Finally(Action action)
-			{
-				this.action = action;
-			}
-
-			public void Dispose(){ action(); }
+			indentation = old + "   ";
+			return new DisposableAction(() => indentation = old);
 		}
 	}
 }

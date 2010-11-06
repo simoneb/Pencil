@@ -12,8 +12,7 @@ namespace Pencil
 		readonly Logger logger;
 		readonly IEnumerable<Path> referencedAssemblies;
 
-		public ProjectCompiler(Logger logger, CodeDomProvider codeProvider,
-			IEnumerable<Path> referencedAssemblies)
+		public ProjectCompiler(Logger logger, CodeDomProvider codeProvider, IEnumerable<Path> referencedAssemblies)
 		{
 			this.logger = logger;
 			this.codeProvider = codeProvider;

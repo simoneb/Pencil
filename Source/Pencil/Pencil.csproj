@@ -57,6 +57,7 @@
     <Compile Include="CompilationFailedException.cs" />
     <Compile Include="DefaultAttribute.cs" />
     <Compile Include="DependsOnAttribute.cs" />
+    <Compile Include="DisposableAction.cs" />
     <Compile Include="DuplicateTargetException.cs" />
     <Compile Include="ExecutionEnvironment.cs" />
     <Compile Include="FileSet.cs" />

@@ -1,3 +1,5 @@
+using OpenFileSystem.IO;
+
 namespace Pencil.Test.Stubs
 {
     using System;
@@ -5,6 +7,8 @@ namespace Pencil.Test.Stubs
     class ProjectStub : IProject
     {
         public Action<string> RunHandler = x => {};
+        public Func<IFileSystem> FileSystemHandler = () => null;
+        public Func<IExecutionEnvironment> PlatformHandler = () => null;
 		public Predicate<string> HasTargetHandler;
 		public Func<IProject, string> DefaultTargetHandler = x => null;
 
@@ -20,6 +24,16 @@ namespace Pencil.Test.Stubs
         public string DefaultTarget
         {
             get { return DefaultTargetHandler(this); }
+        }
+
+        public IFileSystem FileSystem
+        {
+            get { return FileSystemHandler(); }
+        }
+
+        public IExecutionEnvironment Platform
+        {
+            get { return PlatformHandler(); }
         }
     }
 }

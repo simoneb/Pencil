@@ -7,6 +7,6 @@ namespace Pencil
         void Run(string fileName, string arguments, Action<IProcess> processHandler);
 		Logger Logger { get; }
 		bool IsMono { get; }
-        string CurrentDirectory { get; }
+        string CurrentDirectory { get; set; }
     }
 }

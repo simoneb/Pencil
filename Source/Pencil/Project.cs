@@ -24,8 +24,8 @@ namespace Pencil
             get { return targets.FirstOrDefault(t => t.Value.IsDefault).Key; }
 	    }
 
-        protected IFileSystem FileSystem { get { return New<IFileSystem>(); } }
-        protected IExecutionEnvironment Platform { get { return New<IExecutionEnvironment>(); } }
+        public IFileSystem FileSystem { get { return New<IFileSystem>(); } }
+        public IExecutionEnvironment Platform { get { return New<IExecutionEnvironment>(); } }
 
 	    public T New<T>()
 		{

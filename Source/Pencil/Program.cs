@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using OpenFileSystem.IO.FileSystem.Local;
 
@@ -10,7 +11,7 @@ namespace Pencil
 		public const int Failure = 1;
 
 		readonly Logger logger;
-		readonly Converter<string,IProject> compiler;
+		readonly Converter<string, IProject> compiler;
 
  		public Program(Logger logger, Converter<string, IProject> compiler)
 		{
@@ -22,22 +23,42 @@ namespace Pencil
 		{
 			var project = compiler(args[0]);
 
-			project.Register(LocalFileSystem.Instance);
-			project.Register<IExecutionEnvironment>(new ExecutionEnvironment(logger));
+		    var fileSystem = LocalFileSystem.Instance;
+		    var platform = new ExecutionEnvironment(logger);
 
-            if (project.HasDefaultTarget && args.Count() == 1)
-                BuildTarget(project, project.DefaultTarget);
-            else
-		        foreach (var target in args.Skip(1))
-		            if (BuildTarget(project, target) != Success)
-		                return Failure;
+		    project.Register(fileSystem);
+		    project.Register<IExecutionEnvironment>(platform);
 
-		    logger.Write("BUILD SUCCEEDED");
+		    var buildFilePath = fileSystem.GetFile(args[0]).Parent.Path.ToString();
 
-			return Success;
+            using (Pushd(buildFilePath, platform))
+                return Run(args, project);
 		}
 
-		public int BuildTarget(IProject project, string target)
+	    private static IDisposable Pushd(string directory, IExecutionEnvironment platform)
+	    {
+	        var current = platform.CurrentDirectory;
+		    platform.CurrentDirectory = directory;
+
+	        return new DisposableAction(() => platform.CurrentDirectory = current);
+	    }
+
+	    private int Run(IEnumerable<string> args, IProject project)
+	    {
+            if (project.HasDefaultTarget && args.Count() == 1)
+            {
+                if (BuildTarget(project, project.DefaultTarget) != Success)
+                    return Failure;
+            }
+            else if (args.Skip(1).Any(target => BuildTarget(project, target) != Success))
+                return Failure;
+
+	        logger.Write("BUILD SUCCEEDED");
+
+	        return Success;
+	    }
+
+	    public int BuildTarget(IProject project, string target)
 		{
             try
             {

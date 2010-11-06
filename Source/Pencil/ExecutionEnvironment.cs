@@ -29,6 +29,7 @@ namespace Pencil
         public string CurrentDirectory
         {
             get { return Environment.CurrentDirectory; }
+            set { Environment.CurrentDirectory = value; }
         }
 
         public Logger Logger
