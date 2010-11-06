@@ -1,12 +1,19 @@
 @echo off
-color
-@Tools\Pencil.Build.exe Pencil.cs -r:Tools\Pencil.dll -r:Tools\Pencil.Unit.dll -r:Tools\Pencil.Build.FSharpCompilerTask.dll %*
-goto %ERRORLEVEL%
-rem Fail!, paint it red.
-:1
-	color 4F
-	goto done
+cls
+pushd %~dp0
+
+@Tools\Pencil.exe -r:System.dll Pencil.cs %*
+
+if NOT ERRORLEVEL = 0 goto error
+
 rem Success, paint it green.
-:0
 	color 2F
+	goto done
+:error
+rem Fail!, paint it red.
+	color 4F
+	
 :done
+	popd
+	@pause
+	color

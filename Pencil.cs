@@ -1,178 +1,116 @@
 using System;
-using Pencil.IO;
-using Pencil.Build;
-using Pencil.Build.Tasks;
-using Pencil.Unit;
+using System.Net;
+using OpenFileSystem.IO;
+using OpenFileSystem.IO.FileSystem.Local;
+using Pencil;
+using Pencil.Tasks;
 
 public class PencilProject : Project
 {
-	Path Outdir { get { return new Path("Build") + (debugMode ? "Debug" : "Release"); } }
-	readonly Path source = new Path("Source");
-	IFileSystem FileSystem { get { return New<IFileSystem>(); } }
-	bool debugMode = true;
-
-    public void Core()
-	{
-		var csc = NewCSharpCompiler();
-		csc.Sources.Add(source + "Core" + "*.cs")
-			.Add(source + "NMeter" + "*.cs")
-			.Add(source + "IO" + "*.cs");
-		csc.References.Add(new Path("System.Drawing.dll"));
-		csc.OutputType = OutputType.Library;
-		csc.Output = Outdir + "Pencil.dll";
-        csc.Compile();
-	}
-
-	[DependsOn("Core")]
+    [DependsOn("Clean")]
 	public void Build()
-    {
-		var csc = NewCSharpCompiler();
-		var build = source + "Build";
-        csc.Sources.Add(build + "*.cs")
-			.Add(build + "Tasks" + "*.cs");
-		csc.References.Add(Outdir + "Pencil.dll");
-        csc.OutputType = OutputType.Application;
-        csc.Output = Outdir + "Pencil.Build.exe";
-    	csc.Compile();
+	{
+	    var msbuild = NewMSBuildTask();
+        msbuild.ShowCommandLine = true;
+	    msbuild.ProjectFile = "Pencil.sln";
+        msbuild.AddProperty("Configuration", "Release");
+        msbuild.AddProperty("Platform", "Any CPU");
+        msbuild.Verbosity = MSBuildVerbosity.Quiet;
+	    msbuild.Targets = new[] {"Rebuild"};
+
+        msbuild.Execute();
     }
-
-	[DependsOn("Core")]
-	public void Console()
-	{
-		var csc = NewCSharpCompiler();
-		csc.Sources.Add(source + "NMeter" + "Console" + "*.cs");
-		csc.References.Add(Outdir + "Pencil.dll");
-		csc.OutputType = OutputType.Application;
-		csc.Output = Outdir + "NMeter.Console.exe";
-		csc.Compile();
-	}
-
-	[DependsOn("Core"), DependsOn("Build")]
-	public void BuildTest()
-	{
-		var csc = NewCSharpCompiler();
-		var test = new Path("Test");
-		var nunitDir = new Path("Tools") + "NUnit-2.4.8-net-2.0" + "bin";
-
-		csc.Sources.Add(test + "*.cs")
-			.Add(test + "Core" + "*.cs")
-			.Add(test + "Build" + "*.cs")
-			.Add(test + "Build" + "Tasks" + "*.cs")
-			.Add(test + "NMeter" + "*.cs")
- 			.Add(test + "Stubs" + "*.cs");
-		csc.References.Add(new Path("System.Drawing.dll"))
-			.Add(Outdir + "Pencil.dll")
-			.Add(Outdir + "Pencil.Build.exe")
-			.Add(nunitDir + "nunit.framework.dll");
-		csc.OutputType = OutputType.Library;
-		csc.Output = Outdir + "Pencil.Test.dll";
-		csc.Compile();
-	}
-
-	[DependsOn("BuildTest")]
-	public void Test()
-	{
-		var test = new Path("Test");
-		var nunitDir = new Path("Tools") + "NUnit-2.4.8-net-2.0" + "bin";
-		FileSystem.CopyFile(test + "SampleProject.xml", Outdir + "SampleProject.xml", true);
-
-		var nunit = New<NUnitTask>();
-		nunit.NUnitBinPath= nunitDir;
-		nunit.Target = Outdir + "Pencil.Test.dll";
-		nunit.ShadowCopy = false;
-		nunit.ShowLogo = false;
-
-		if(FileSystem.GetLastWriteTime(new Path("TestResult.xml"))
-		    < FileSystem.GetLastWriteTime(nunit.Target))
-    		nunit.Execute();
-	}
-	[DependsOn("Build")]
-	public void FSharpCompilerTask()
-	{
-		var fsc = NewFSharpCompiler();
-		fsc.Sources.Add(source + "Core" + "Funky.fs")
-			.Add(source + "Build" + "Tasks" + "FSharpCompilerTask.fs");
-		fsc.References.Add(fsc.BinPath + "FSharp.Core.dll")
-		    .Add(Outdir + "Pencil.dll")
-		    .Add(Outdir + "Pencil.Build.exe");
-		fsc.OutputType = OutputType.Library;
-		fsc.Output = Outdir + "Pencil.Build.FSharpCompilerTask.dll";
-        fsc.Compile();
-	}
-    [DependsOn("Core")]
-	public void Unit()
-	{
-		var fsc = NewFSharpCompiler();
-		fsc.Sources.Add(source + "Core" + "Funky.fs")
-			.Add(source + "Unit" + "Syntax.fs")
-			.Add(source + "Unit" + "Suite.fs")
-			.Add(source + "Unit" + "TestRunner.fs")
-			.Add(source + "Unit" + "TextWriterTestResult.fs")
-			.Add(source + "Unit" + "AssemblyTestRunner.fs");
-		fsc.References.Add(fsc.BinPath + "FSharp.Core.dll")
-			.Add(Outdir + "Pencil.dll");
-		fsc.OutputType = OutputType.Library;
-		fsc.Output = Outdir + "Pencil.Unit.dll";
-		fsc.Compile();
-	}
-
-	[DependsOn("Unit"), DependsOn("BuildTest"), DependsOn("FSharpCompilerTask")]
-	public void TestFs()
-	{
-		var fsc = NewFSharpCompiler();
-		var test = new Path("Test");
-		var nunitDir = new Path("Tools") + "NUnit-2.4.8-net-2.0" + "bin";
-
-		fsc.Sources.Add(test + "Build" + "FileSetTests.fs")
-			.Add(test + "Build" + "Tasks" + "CompilerBaseTaskTests.fs")
-			.Add(test + "Build" + "Tasks" + "FSharpCompilerTaskTests.fs")
-			.Add(test + "Unit" + "BeMatcherTests.fs")
-			.Add(test + "Unit" + "ContainMatcherTests.fs")
-			.Add(test + "Unit" + "SyntaxTests.fs")
-			.Add(test + "Unit" + "TextWriterRunnerTests.fs")
-			.Add(test + "Unit" + "TextWriterTestResultTests.fs");
-
-		fsc.References.Add(Outdir + "Pencil.dll")
-			.Add(Outdir + "Pencil.Build.exe")
-			.Add(Outdir + "Pencil.Unit.dll")
-			.Add(Outdir + "Pencil.Build.FSharpCompilerTask.dll")
-			.Add(Outdir + "Pencil.Test.dll");
-		fsc.OutputType = OutputType.Library;
-		fsc.Output = Outdir + "Pencil.Test.FSharp.dll";
-    	fsc.Compile();
-    	var results = new TextWriterTestResult(System.Console.Out,
-                TestRunner.NewDefaultStopwatch());
-        AssemblyTestRunner.Run(fsc.Output.ToString(), 
-            new TestRunner(results));
-        results.ShowReport();          
-	}
 
 	public void Clean()
 	{
-		foreach(var ext in new[]{ "*.bak", "*.pidb" })
-		foreach(var file in FileSystem.GetFilesRecursive(new Path("."), ext))
-			FileSystem.DeleteFile(file);
+        var msbuild = NewMSBuildTask();
+        msbuild.ShowCommandLine = true;
+        msbuild.ProjectFile = "Pencil.sln";
+        msbuild.AddProperty("Configuration", "Release");
+        msbuild.AddProperty("Platform", "Any CPU");
+        msbuild.Verbosity = MSBuildVerbosity.Quiet;
+        msbuild.Targets = new[] { "Clean" };
+
+        msbuild.Execute();
+
+        FileSystem.GetDirectory("dist").Delete();
+        FileSystem.GetDirectory("merged").Delete();
 	}
 
-	public void Release()
-	{
-		debugMode = false;
-	}
+    [Default]
+    [DependsOn("Build")]
+    public void Test()
+    {
+        new NUnitTask(FileSystem, Platform)
+        {
+            NUnitBinPath = new Path(@"Tools\NUnit"),
+            Target = new Path(@"Test\Pencil.Test\bin\Release\Pencil.Test.dll")
+        }.Execute();
+    }
 
-	CSharpCompilerTask NewCSharpCompiler()
-	{
-		var csc = New<CSharpCompilerTask>();
-		csc.Debug = debugMode;
-		csc.Optimize = !debugMode;
-		return csc;
-	}
+    [DependsOn("Build")]
+    [DependsOn("Test")]
+    public void Dist()
+    {
+        var dist = FileSystem.GetDirectory("dist");
 
-	FSharpCompilerTask NewFSharpCompiler()
-	{
-		var fsc = New<FSharpCompilerTask>();
-		fsc.BinPath = new Path(Environment.GetEnvironmentVariable("FSharp"));
-		fsc.Debug = false;
-		fsc.Optimize = !debugMode;
-		return fsc;
-	}
+        if (dist.Exists)
+            dist.Delete();
+
+        dist.MustExist();
+
+        foreach (var file in FileSystem.GetDirectory(@"Source\Pencil\bin\Release").Files())
+            file.CopyTo(dist.GetFile(file.Name));
+    }
+
+    [DependsOn("Dist")]
+    public void ILMerge()
+    {
+        const string ilmergeExe = @"Tools\ilmerge\SourceDir\ILMerge.exe";
+
+        if (!FileSystem.GetFile(ilmergeExe).Exists)
+            ExtractILMerge(DownloadILMerge(FileSystem.GetTempDirectory()), @"Tools\ilmerge");
+
+        RunILMerge(ilmergeExe, "merged");
+    }
+
+    private void RunILMerge(string ilmergeExe, string output)
+    {
+        FileSystem.GetDirectory(output).MustExist();
+
+        var commandLine = string.Format(@"/t:exe /xmldocs /out:{0}\Pencil.exe {1}\Pencil.exe {1}\OpenFileSystem.dll",
+                                      output, "dist");
+
+        new ExecTask(FileSystem, Platform, new Path(ilmergeExe))
+        {
+            Arguments = commandLine,
+            ShowCommandLine = true
+        }.Execute();
+    }
+
+    private void ExtractILMerge(string msiPath, string destinationDirectory)
+    {
+        FileSystem.GetDirectory(destinationDirectory).MustExist();
+
+        new ExecTask(FileSystem, Platform, new Path(@"Tools\lessmsi\lessmsi.exe"))
+        {
+            Arguments = "/x " + msiPath + " " + destinationDirectory,
+            ShowCommandLine = true
+        }.Execute();
+    }
+
+    private string DownloadILMerge(IDirectory destination)
+    {
+        var destinationFile = destination.GetFile(Guid.NewGuid() + ".msi").Path.FullPath;
+
+        using (var c = new WebClient())
+            c.DownloadFile("http://download.microsoft.com/download/1/3/4/1347C99E-9DFB-4252-8F6D-A3129A069F79/ILMerge.msi", destinationFile);
+
+        return destinationFile;
+    }
+
+    MSBuild3540Task NewMSBuildTask()
+    {
+        return new MSBuild40Task(FileSystem, Platform);
+    }
 }

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{810E3260-3219-4078-BD71-E4CDECF0E53B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Pencil.Test</RootNamespace>
+    <AssemblyName>Pencil.Test</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Tools\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenFileSystem">
+      <HintPath>..\..\Tools\OpenFileSystem\OpenFileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Expect.cs" />
+    <Compile Include="LoggerTests.cs" />
+    <Compile Include="MethodTargetTests.cs" />
+    <Compile Include="ProgramTests.cs" />
+    <Compile Include="ProjectTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartupTests.cs" />
+    <Compile Include="Stubs\ExecutionEnvironmentStub.cs" />
+    <Compile Include="Stubs\ProcessStub.cs" />
+    <Compile Include="Stubs\ProjectStub.cs" />
+    <Compile Include="Stubs\TargetStub.cs" />
+    <Compile Include="TargetTests.cs" />
+    <Compile Include="Tasks\CSharpCompilerTaskTests.cs" />
+    <Compile Include="Tasks\ExecTaskBaseTests.cs" />
+    <Compile Include="Tasks\MSBuild20TaskTests.cs" />
+    <Compile Include="Tasks\MSBuild3540TaskTestsBase.cs" />
+    <Compile Include="Tasks\MSBuild35TaskTests.cs" />
+    <Compile Include="Tasks\MSBuild40TaskTests.cs" />
+    <Compile Include="Tasks\MSBuildTaskTests.cs" />
+    <Compile Include="Tasks\NUnitTaskTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Source\Pencil\Pencil.csproj">
+      <Project>{07315A05-6F38-4AD9-9223-D68EE046A90B}</Project>
+      <Name>Pencil</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
