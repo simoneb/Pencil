@@ -24,7 +24,7 @@ namespace Pencil.Build.Tasks
 
         public MSBuildVerbosity? Verbosity { get; set; }
 
-        protected IDirectory FrameworksDirectory
+        private IDirectory FrameworksDirectory
         {
             get { return RuntimeDirectory.Parent; }
         }
