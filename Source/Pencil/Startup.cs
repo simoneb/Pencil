@@ -35,6 +35,7 @@ namespace Pencil
 		public static IEnumerable<Path> GetReferencedAssemblies(IEnumerable<string> args)
 		{
 			yield return new Path(Assembly.GetExecutingAssembly().Location);
+			yield return new Path("System.dll");
 
             foreach(var item in args)
 				if(item.StartsWith("-r:"))

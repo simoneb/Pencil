@@ -1,7 +1,7 @@
 @echo off
 cls
 
-@%~dp0Tools\Pencil.exe -r:System.dll %~dp0Pencil.cs %*
+@%~dp0Tools\Pencil.exe %~dp0Pencil.cs %*
 
 if not %ERRORLEVEL% ==0 goto error
 
