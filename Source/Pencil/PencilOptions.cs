@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OpenFileSystem.IO.FileSystem.Local;
+using Pencil.Tasks;
 
 namespace Pencil
 {
@@ -13,6 +13,7 @@ namespace Pencil
             this.parser = parser;
             Assemblies = new HashSet<Path>();
             Targets = new HashSet<string>();
+            CompilerVersion = CompilerVersion.Default;
         }
 
         public ICollection<Path> Assemblies { get; private set; }
@@ -24,6 +25,8 @@ namespace Pencil
         public bool Help { get; set; }
 
         public bool NoLogo { get; set; }
+
+        public CompilerVersion CompilerVersion { get; set; }
 
         public void Display(Logger logger)
         {

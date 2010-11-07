@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using Mono.Options;
 using OpenFileSystem.IO.FileSystem.Local;
 using System;
 using System.Diagnostics;
@@ -12,10 +13,24 @@ namespace Pencil
 	{
 		static int Main(string[] args)
 		{
-		    var parser = new PencilOptionsParser();
-		    var result = parser.Parse(args);
 		    var logger = new Logger(Console.Out);
-		    var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", "v3.5"}});
+
+		    var parser = new PencilOptionsParser();
+
+		    IPencilOptions result;
+
+		    try
+		    {
+		        result = parser.Parse(args);
+		    }
+		    catch (OptionException e)
+		    {
+		        logger.Write(e.Message);
+                parser.Display(logger);
+		        return Program.Failure;
+		    }
+
+		    var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", result.CompilerVersion.CodePoviderName}});
 		    var compiler = new ProjectCompiler(logger, codeProvider, result.Assemblies.Union(GetDefaultAssemblies()));
 			var program = new Program(logger, compiler.ProjectFromFile);
 

@@ -36,11 +36,11 @@ namespace Pencil.Test.Tasks
 			compiler.Execute();
     	}
 
-        [TestCase(CompilerVersion.v35, "v3.5")]
-        [TestCase(CompilerVersion.v40, "v4.0.30319")]
-        public void Should_support_compiler_version(CompilerVersion version, string fxVersionFolder)
+        [TestCase("v3.5", "v3.5")]
+        [TestCase("v4.0", "v4.0.30319")]
+        public void Should_support_compiler_version(string version, string fxVersionFolder)
         {
-            compiler.Version = version;
+            compiler.Version = CompilerVersion.FromName(version);
 
             fileSystem.GetDirectory(RuntimeEnvironment.GetRuntimeDirectory()).Parent.Create().GetOrCreateDirectory(fxVersionFolder);
 

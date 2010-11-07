@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenFileSystem.IO.FileSystem.Local;
+using Pencil.Tasks;
 
 namespace Pencil.Test.Stubs
 {
@@ -24,6 +25,8 @@ namespace Pencil.Test.Stubs
         public bool Help { get; set; }
 
         public bool NoLogo { get; set; }
+
+        public CompilerVersion CompilerVersion { get; set; }
 
         public void Display(Logger logger)
         {

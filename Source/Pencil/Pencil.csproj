@@ -83,6 +83,7 @@
     <Compile Include="TargetFailedException.cs" />
     <Compile Include="Tasks\CommandLineBuilder.cs" />
     <Compile Include="Tasks\CompilerBaseTask.cs" />
+    <Compile Include="Tasks\CompilerVersion.cs" />
     <Compile Include="Tasks\CSharpCompilerTask.cs" />
     <Compile Include="Tasks\ExecTask.cs" />
     <Compile Include="Tasks\ExecTaskBase.cs" />

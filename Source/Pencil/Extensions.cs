@@ -15,5 +15,10 @@ namespace Pencil
         {
             return !enumerable.Any();
         }
+
+        public static string Join(this IEnumerable<string> enumerable, string separator)
+        {
+            return string.Join(separator, enumerable.ToArray());
+        }
     }
 }

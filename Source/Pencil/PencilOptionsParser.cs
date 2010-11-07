@@ -2,6 +2,7 @@
 using Mono.Options;
 using OpenFileSystem.IO.FileSystem.Local;
 using System.Linq;
+using Pencil.Tasks;
 
 namespace Pencil
 {
@@ -16,10 +17,28 @@ namespace Pencil
 
             inner = new OptionSet
             {
-                { "r|reference=", "References the specified {ASSEMBLY} when compiling the build script", x => result.Assemblies.Add(new Path(x)) },
+                { 
+                    "r|reference=", 
+                    "References the specified {ASSEMBLY} when compiling the build script", 
+                    x => result.Assemblies.Add(new Path(x)) 
+                },
+                { 
+                    "c|compiler=", 
+                    string.Format("The version of the C# compiler to use to compile the build script. Available values: {0}. Default is {1}", Compilers, DefaultCompiler), 
+                    c => result.CompilerVersion = CompilerVersion.FromName(c) },
                 { "nologo", "Do not display the application logo", x => result.NoLogo = true },
                 { "h|help|?", "Display this help", ignored => result.Help = true }
             };
+        }
+
+        private static string DefaultCompiler
+        {
+            get { return CompilerVersion.Default.CodePoviderName; }
+        }
+
+        private static string Compilers
+        {
+            get { return CompilerVersion.All.Select(c => c.CodePoviderName).Join(", "); }
         }
 
         public IPencilOptions Parse(params string[] args)
@@ -34,7 +53,7 @@ namespace Pencil
 
         public void Display(Logger logger)
         {
-            logger.Write("Usage: Pencil.exe [options] {{path to build script}} [targets]");
+            logger.Write("Usage: Pencil.exe [options] <path to build script> [targets]");
             logger.WriteLine();
             inner.WriteOptionDescriptions(logger.Target);
             logger.WriteLine();

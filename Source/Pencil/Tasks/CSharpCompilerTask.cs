@@ -11,12 +11,7 @@ namespace Pencil.Tasks
 		Library, Application, WindowsApplication, Module
 	}
 
-    public enum CompilerVersion
-    {
-        v35, v40
-    }
-
-	public class CSharpCompilerTask : CompilerBaseTask
+    public class CSharpCompilerTask : CompilerBaseTask
 	{
 	    public OutputType OutputType { get; set; }
 		public bool Debug { get; set; }
@@ -26,6 +21,7 @@ namespace Pencil.Tasks
 
 	    public CSharpCompilerTask(IFileSystem fileSystem, IExecutionEnvironment platform): base(fileSystem, platform)
 	    {
+	        Version = CompilerVersion.Default;
 	    }
 
 	    public override Path Program
@@ -43,15 +39,13 @@ namespace Pencil.Tasks
 	    {
 	        get
 	        {
-	            switch (Version)
-	            {
-	                case CompilerVersion.v35:
-	                    return RuntimeDirectory.Parent.Path.Combine("v3.5");
-	                case CompilerVersion.v40:
-	                    return GuessCompilerDirectory("v4.0");
-	                default:
-                        throw new InvalidOperationException(string.Format("Path of compiler version {0} was not found", Version));
-                }
+	            if (Version.Equals(CompilerVersion.V35))
+	                return RuntimeDirectory.Parent.Path.Combine("v3.5");
+
+                if (Version.Equals(CompilerVersion.V40))
+                    return GuessCompilerDirectory("v4.0");
+
+                throw new InvalidOperationException(string.Format("Path of compiler version {0} was not found", Version));
 	        }
 	    }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using OpenFileSystem.IO.FileSystem.Local;
+using Pencil.Tasks;
 
 namespace Pencil
 {
@@ -10,6 +11,7 @@ namespace Pencil
         IEnumerable<string> Targets { get; }
         bool Help { get; set; }
         bool NoLogo { get; }
+        CompilerVersion CompilerVersion { get; }
         void Display(Logger logger);
     }
 }
