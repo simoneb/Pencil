@@ -12,18 +12,18 @@ namespace Pencil
 	{
 		static int Main(string[] args)
 		{
-			var logger = new Logger(Console.Out);
-			var codeProvider = new CSharpCodeProvider(new Dictionary<string,string> {{"CompilerVersion", "v3.5"}});
-			var compiler = new ProjectCompiler(logger, codeProvider, GetReferencedAssemblies(args));
+		    var parser = new PencilOptionsParser();
+		    var result = parser.Parse(args);
+		    var logger = new Logger(Console.Out);
+		    var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", "v3.5"}});
+		    var compiler = new ProjectCompiler(logger, codeProvider, result.Assemblies.Union(GetDefaultAssemblies()));
 			var program = new Program(logger, compiler.ProjectFromFile);
-
-			program.ShowLogo();
 
 			var stopwatch = Stopwatch.StartNew();
 
             try
             {
-				return program.Run(GetArguments(args));
+				return program.Run(result);
             }
             finally
             {
@@ -32,19 +32,10 @@ namespace Pencil
             }
 		}
 
-		public static IEnumerable<Path> GetReferencedAssemblies(IEnumerable<string> args)
+        private static IEnumerable<Path> GetDefaultAssemblies()
 		{
 			yield return new Path(Assembly.GetExecutingAssembly().Location);
 			yield return new Path("System.dll");
-
-            foreach(var item in args)
-				if(item.StartsWith("-r:"))
-					yield return new Path(item.Substring("-r:".Length));
-		}
-
-		public static string[] GetArguments(IEnumerable<string> args)
-		{
-			return new List<string>(args.Where(x => !x.StartsWith("-"))).ToArray();
 		}
 	}
 }

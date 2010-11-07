@@ -12,17 +12,15 @@ namespace Pencil.Test
         [Test]
         public void BuildTarget_should_return_Failure_if_target_not_in_Project()
         {
-            var project = new ProjectStub();
-            project.HasTargetHandler = x => false;
-           
+            var project = new ProjectStub {HasTargetHandler = x => false};
+
             Assert.That(Program.BuildTarget(project, "Target"), Is.EqualTo(Program.Failure));
         }
 
         [Test]
         public void BuildTarget_should_return_Success_if_valid_target_and_successful_build()
         {
-            var project = new ProjectStub();
-            project.HasTargetHandler = x => true;
+            var project = new ProjectStub {HasTargetHandler = x => true};
 
             Assert.That(Program.BuildTarget(project, "Target"), Is.EqualTo(Program.Success));
         }
@@ -35,7 +33,7 @@ namespace Pencil.Test
             project.HasTargetHandler = x => true;
             project.RunHandler = built.Add;
 
-			new Program(Logger.Null, x => project).Run(new[]{ "BuildFile", "Target1", "Target2" });
+			new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile", "Target1", "Target2"));
 
 			built.ShouldEqual(new[]{ "Target1", "Target2" });
         }
@@ -49,7 +47,7 @@ namespace Pencil.Test
             project.RunHandler = built.Add;
             project.DefaultTargetHandler = x => "Target1";
 
-            new Program(Logger.Null, x => project).Run(new[] { "BuildFile" });
+            new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile"));
 
             built.ShouldEqual(new[] { "Target1" });
         }
@@ -63,7 +61,7 @@ namespace Pencil.Test
             project.RunHandler = built.Add;
             project.DefaultTargetHandler = x => null;
 
-            new Program(Logger.Null, x => project).Run(new[] { "BuildFile" });
+            new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile"));
 
             built.ShouldBeEmpty();
         }
@@ -77,7 +75,7 @@ namespace Pencil.Test
             project.RunHandler = built.Add;
             project.DefaultTargetHandler = x => "Default";
 
-            new Program(Logger.Null, x => project).Run(new[] { "BuildFile", "Target1", "Target2" });
+            new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile", "Target1", "Target2" ));
 
             Assert.That(built, Contains.Item("Target1").And.Contains("Target2"));
             CollectionAssert.DoesNotContain(built, "Default");
@@ -95,7 +93,7 @@ namespace Pencil.Test
             string projectCurrentDirectory = null;
             project.RunHandler = s => projectCurrentDirectory = project.Platform.CurrentDirectory;
             
-            new Program(Logger.Null, x => project).Run(new[] { @"path\to\BuildFile", "whatever" });
+            new Program(Logger.Null, x => project).Run(new StubOptions(@"path\to\BuildFile", "whatever"));
 
             StringAssert.EndsWith(@"path\to", projectCurrentDirectory);
         }
@@ -111,7 +109,7 @@ namespace Pencil.Test
 
             var originalDirectory = project.Platform.CurrentDirectory;
 
-            new Program(Logger.Null, x => project).Run(new[] { @"path\to\BuildFile", "whatever" });
+            new Program(Logger.Null, x => project).Run(new StubOptions(@"path\to\BuildFile", "whatever" ));
 
             Assert.AreEqual(originalDirectory, project.Platform.CurrentDirectory);
         }

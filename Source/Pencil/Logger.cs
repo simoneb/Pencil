@@ -22,6 +22,11 @@ namespace Pencil
 			Target.WriteLine(format, args);
 		}
 
+        public void WriteLine()
+        {
+            Target.WriteLine();
+        }
+
 		public IDisposable Indent()
 		{
 			string old = indentation;

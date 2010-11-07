@@ -19,9 +19,18 @@ namespace Pencil
 			this.compiler = compiler;
 		}
 
-		public int Run(string[] args)
+		public int Run(IPencilOptions options)
 		{
-			var project = compiler(args[0]);
+            if(!options.NoLogo)
+                ShowLogo();
+
+            if(options.Help)
+            {
+                options.Display(logger);
+                return Success;
+            }
+
+			var project = compiler(options.BuildScript);
 
 		    var fileSystem = LocalFileSystem.Instance;
 		    var platform = new ExecutionEnvironment(logger);
@@ -29,10 +38,10 @@ namespace Pencil
 		    project.Register(fileSystem);
 		    project.Register<IExecutionEnvironment>(platform);
 
-		    var buildFilePath = fileSystem.GetFile(args[0]).Parent.Path.ToString();
+		    var buildFilePath = fileSystem.GetFile(options.BuildScript).Parent.Path.ToString();
 
             using (Pushd(buildFilePath, platform))
-                return Run(args, project);
+                return Run(options.Targets, project);
 		}
 
 	    private static IDisposable Pushd(string directory, IExecutionEnvironment platform)
@@ -43,14 +52,14 @@ namespace Pencil
 	        return new DisposableAction(() => platform.CurrentDirectory = current);
 	    }
 
-	    private int Run(IEnumerable<string> args, IProject project)
+	    private int Run(IEnumerable<string> targets, IProject project)
 	    {
-            if (project.HasDefaultTarget && args.Count() == 1)
+            if (targets.Empty() && project.HasDefaultTarget)
             {
                 if (BuildTarget(project, project.DefaultTarget) != Success)
                     return Failure;
             }
-            else if (args.Skip(1).Any(target => BuildTarget(project, target) != Success))
+            else if (targets.Any(target => BuildTarget(project, target) != Success))
                 return Failure;
 
 	        logger.Write("BUILD SUCCEEDED");
@@ -80,10 +89,12 @@ namespace Pencil
             return Failure;
         }
 
-		public void ShowLogo()
+	    private void ShowLogo()
 		{
 			logger.Write("Pencil.Build version {0}", GetType().Assembly.GetName().Version);
 			logger.Write("Copyright (C) 2008 Torbjörn Gyllebring");
+			logger.Write("Copyright (C) 2010 Simone Busoli");
+            logger.WriteLine();
 		}
 	}
 }

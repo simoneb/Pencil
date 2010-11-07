@@ -41,16 +41,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PencilOptionsParserTests.cs" />
     <Compile Include="Expect.cs" />
     <Compile Include="LoggerTests.cs" />
     <Compile Include="MethodTargetTests.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="ProjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartupTests.cs" />
     <Compile Include="Stubs\ExecutionEnvironmentStub.cs" />
     <Compile Include="Stubs\ProcessStub.cs" />
     <Compile Include="Stubs\ProjectStub.cs" />
+    <Compile Include="Stubs\StubOptions.cs" />
     <Compile Include="Stubs\TargetStub.cs" />
     <Compile Include="TargetTests.cs" />
     <Compile Include="Tasks\CSharpCompilerTaskTests.cs" />
