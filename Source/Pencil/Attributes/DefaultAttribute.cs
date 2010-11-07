@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace Pencil
+namespace Pencil.Attributes
 {
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class DefaultAttribute : Attribute

@@ -1,9 +1,10 @@
+using System;
+using JetBrains.Annotations;
 using OpenFileSystem.IO;
 
 namespace Pencil.Test.Stubs
 {
-    using System;
-
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     class ProjectStub : IProject
     {
         public Action<string> RunHandler = x => {};

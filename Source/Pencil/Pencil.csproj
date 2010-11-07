@@ -54,12 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Annotations\Annotations.cs" />
+    <Compile Include="Attributes\DefaultAttribute.cs" />
+    <Compile Include="Attributes\DependsOnAttribute.cs" />
+    <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="CompilationFailedException.cs" />
-    <Compile Include="DefaultAttribute.cs" />
-    <Compile Include="DependsOnAttribute.cs" />
     <Compile Include="DisposableAction.cs" />
     <Compile Include="DuplicateTargetException.cs" />
     <Compile Include="ExecutionEnvironment.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FileSet.cs" />
     <Compile Include="IExecutionEnvironment.cs" />
     <Compile Include="IProcess.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="MethodTarget.cs" />
     <Compile Include="MethodTargetExtractor.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="ProcessAdapter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Project.cs" />

@@ -3,6 +3,7 @@ using System.Net;
 using OpenFileSystem.IO;
 using OpenFileSystem.IO.FileSystem.Local;
 using Pencil;
+using Pencil.Attributes;
 using Pencil.Tasks;
 
 public class PencilProject : Project

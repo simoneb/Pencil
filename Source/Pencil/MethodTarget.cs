@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
+using Pencil.Attributes;
 
 namespace Pencil
 {
@@ -47,6 +48,16 @@ namespace Pencil
         public override string Name
         {
             get { return method.Name; }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return method.GetCustomAttributes(typeof (DescriptionAttribute), false)
+                           .Cast<DescriptionAttribute>()
+                           .SingleOrDefault().Get(x => x.Description) ?? string.Empty;
+            }
         }
     }
 }
