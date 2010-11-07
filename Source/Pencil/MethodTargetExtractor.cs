@@ -14,7 +14,7 @@ namespace Pencil
             {
                 try
                 {
-                    targets.Add(m.Name, new MethodTarget(project, m));
+                    targets.Add(MethodTarget.GetTargetName(m), new MethodTarget(project, m));
                 }
                 catch (ArgumentException e)
                 {

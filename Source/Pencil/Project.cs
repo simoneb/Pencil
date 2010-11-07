@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,5 +66,10 @@ namespace Pencil
 	    {
             get { return !string.IsNullOrEmpty(DefaultTarget); }
 	    }
+
+        protected void Call(Action target)
+        {
+            Run(MethodTarget.GetTargetName(target.Method));
+        }
 	}
 }

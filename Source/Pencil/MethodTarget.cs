@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
@@ -58,6 +59,11 @@ namespace Pencil
                            .Cast<DescriptionAttribute>()
                            .SingleOrDefault().Get(x => x.Description) ?? string.Empty;
             }
+        }
+
+        public static string GetTargetName(MethodInfo method)
+        {
+            return method.Name;
         }
     }
 }

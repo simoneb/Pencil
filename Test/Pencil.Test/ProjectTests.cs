@@ -1,8 +1,8 @@
 using Pencil.Attributes;
 using Pencil.Tasks;
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Pencil.Test.Stubs;
 
 namespace Pencil.Test
 {
@@ -97,16 +97,31 @@ namespace Pencil.Test
         {
             Assert.AreEqual("Build", new WithDefaultTarget().DefaultTarget);
         }
-	}
 
-    public class SpyProject : Project
-    {
-        public Action<Target> RunHandler = ignored => {};
-
-        protected override void RunCore(Target target)
+        [Test]
+        public void Should_call_target_within_target()
         {
-            RunHandler(target);
-            base.RunCore(target);
+            var targetsBuilt = new List<string>();
+            var project = new CallTarget();
+            project.RunHandler += target => targetsBuilt.Add(target.Name);
+            project.Run("calling");
+            Assert.That(targetsBuilt, Is.EqualTo(new[] { "Calling", "Called", "BeforeCalled" }));
         }
-    }
+
+        class CallTarget : SpyProject
+        {
+            public void Calling()
+            {
+                Call(Called);
+            }
+
+            [DependsOn("BeforeCalled")]
+            public void Called()
+            {
+                
+            }
+
+            public void BeforeCalled(){}
+        }
+	}
 }
