@@ -11,10 +11,10 @@ namespace Pencil.Test
 		{
 			var output = new StringWriter();
 			var logger = new Logger(output);
-			logger.Write("1");
+			logger.WriteLine("1");
 			using(logger.Indent())
-				logger.Write("2");
-			logger.Write("3");
+				logger.WriteLine("2");
+			logger.WriteLine("3");
 			Assert.AreEqual(string.Format("1{0}   2{0}3{0}", output.NewLine), output.ToString());
 		}
 
@@ -23,7 +23,7 @@ namespace Pencil.Test
 		{
 			var output = new StringWriter();
 			var logger = new Logger(output);
-			logger.Write("{0}+{1}", 1, 2);
+			logger.WriteLine("{0}+{1}", 1, 2);
 			Assert.AreEqual("1+2" + output.NewLine, output.ToString());
 		}
 	}

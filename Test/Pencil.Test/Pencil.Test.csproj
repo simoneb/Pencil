@@ -41,6 +41,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MethodTargetExtractorTest.cs" />
     <Compile Include="PencilOptionsParserTests.cs" />
     <Compile Include="Expect.cs" />
     <Compile Include="LoggerTests.cs" />

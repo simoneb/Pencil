@@ -12,6 +12,7 @@ namespace Pencil
         bool Help { get; set; }
         bool NoLogo { get; }
         CompilerVersion CompilerVersion { get; }
+        bool ShowTargets { get; set; }
         void Display(Logger logger);
     }
 }

@@ -24,13 +24,20 @@ namespace Pencil
             if(!options.NoLogo)
                 ShowLogo();
 
-            if(options.Help)
+		    if(options.Help)
             {
                 options.Display(logger);
                 return Success;
             }
 
-			var project = compiler(options.BuildScript);
+		    var project = compiler(options.BuildScript);
+
+		    if(options.ShowTargets)
+		    {
+		        project.DisplayTargets(logger);
+
+                return Success;
+            }
 
 		    var fileSystem = LocalFileSystem.Instance;
 		    var platform = new ExecutionEnvironment(logger);
@@ -62,7 +69,7 @@ namespace Pencil
             else if (targets.Any(target => BuildTarget(project, target) != Success))
                 return Failure;
 
-	        logger.Write("BUILD SUCCEEDED");
+	        logger.WriteLine("BUILD SUCCEEDED");
 
 	        return Success;
 	    }
@@ -77,13 +84,13 @@ namespace Pencil
                     return Success;
                 }
                 
-                logger.Write("Target \"{0}\" not found.", target);
+                logger.WriteLine("Target \"{0}\" not found.", target);
             }
             catch(TargetFailedException e)
             {
 				var error = e.InnerException;
-                logger.Write("BUILD FAILED - {0}", error.Message);
-				logger.Write(error.StackTrace);
+                logger.WriteLine("BUILD FAILED - {0}", error.Message);
+				logger.WriteLine(error.StackTrace);
             }
 
             return Failure;
@@ -91,9 +98,10 @@ namespace Pencil
 
 	    private void ShowLogo()
 		{
-			logger.Write("Pencil.Build version {0}", GetType().Assembly.GetName().Version);
-			logger.Write("Copyright (C) 2008 Torbjörn Gyllebring");
-			logger.Write("Copyright (C) 2010 Simone Busoli");
+	        var assemblyName = GetType().Assembly.GetName();
+            logger.WriteLine("{0} version {1}", assemblyName.Name, assemblyName.Version);
+			logger.WriteLine("Copyright (C) 2008 Torbjörn Gyllebring");
+			logger.WriteLine("Copyright (C) 2010 Simone Busoli");
             logger.WriteLine();
 		}
 	}

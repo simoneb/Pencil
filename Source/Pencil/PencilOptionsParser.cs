@@ -26,8 +26,9 @@ namespace Pencil
                     "c|compiler=", 
                     string.Format("The version of the C# compiler to use to compile the build script. Available values: {0}. Default is {1}", Compilers, DefaultCompiler), 
                     c => result.CompilerVersion = CompilerVersion.FromName(c) },
+                { "t|targets", "Display a list of available targets and exits", x => result.ShowTargets = true },
                 { "nologo", "Do not display the application logo", x => result.NoLogo = true },
-                { "h|help|?", "Display this help", ignored => result.Help = true }
+                { "h|help|?", "Display this help and exits", ignored => result.Help = true }
             };
         }
 
@@ -53,7 +54,7 @@ namespace Pencil
 
         public void Display(Logger logger)
         {
-            logger.Write("Usage: Pencil.exe [options] <path to build script> [targets]");
+            logger.WriteLine("Usage: Pencil.exe [options] <path to build script> [targets]");
             logger.WriteLine();
             inner.WriteOptionDescriptions(logger.Target);
             logger.WriteLine();

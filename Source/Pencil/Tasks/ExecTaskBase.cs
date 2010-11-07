@@ -26,8 +26,8 @@ namespace Pencil.Tasks
 
             if(ShowCommandLine)
             {
-                Platform.Logger.Write("Starting {0} {1}", fileName, arguments);
-                Platform.Logger.Write("in directory {0}", Platform.CurrentDirectory);
+                Platform.Logger.WriteLine("Starting {0} {1}", fileName, arguments);
+                Platform.Logger.WriteLine("in directory {0}", Platform.CurrentDirectory);
             }
 
             Platform.Run(fileName, arguments, task =>
@@ -45,7 +45,7 @@ namespace Pencil.Tasks
         private void DumpOutput(TextReader source)
         {
             for (var l = source.ReadLine(); l != null; l = source.ReadLine())
-                Platform.Logger.Write(l);
+                Platform.Logger.WriteLine(l);
         }
 
         protected bool IsRunningOnMono

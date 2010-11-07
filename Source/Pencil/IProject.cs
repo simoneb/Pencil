@@ -1,4 +1,4 @@
-using OpenFileSystem.IO;
+using System.Collections.Generic;
 
 namespace Pencil
 {
@@ -9,7 +9,7 @@ namespace Pencil
 		void Register<T>(T instance);
         bool HasDefaultTarget { get; }
         string DefaultTarget { get; }
-        IFileSystem FileSystem { get; }
-        IExecutionEnvironment Platform { get; }
+        IEnumerable<Target> Targets { get; }
+        void DisplayTargets(Logger logger);
     }
 }

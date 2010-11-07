@@ -25,6 +25,25 @@ namespace Pencil
             get { return targets.FirstOrDefault(t => t.Value.IsDefault).Key; }
 	    }
 
+        public IEnumerable<Target> Targets
+        {
+            get { return targets.Values; }
+        }
+
+        public void DisplayTargets(Logger logger)
+        {
+            var start = targets.Keys.Select(t => t.Length).OrderByDescending(x => x).First();
+
+            foreach (var target in Targets)
+            {
+                logger.Write("- {0}", target.Name, target.Description);
+                logger.WriteLine(!string.IsNullOrEmpty(target.Description) 
+                    ? new string(' ', start - target.Name.Length + 2) + "# " + target.Description 
+                    : string.Empty);
+            }
+
+        }
+
         public IFileSystem FileSystem { get { return New<IFileSystem>(); } }
         public IExecutionEnvironment Platform { get { return New<IExecutionEnvironment>(); } }
 
@@ -46,7 +65,7 @@ namespace Pencil
 		    var target = targets[targetName];
 		    var realTargetName = target.Name;
 
-		    Logger.Write("{0}:", realTargetName);
+		    Logger.WriteLine("{0}:", realTargetName);
 
 			using(Logger.Indent())
 			{

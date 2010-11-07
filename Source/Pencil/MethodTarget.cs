@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
@@ -51,7 +50,7 @@ namespace Pencil
             get { return method.Name; }
         }
 
-        public string Description
+        public override string Description
         {
             get
             {

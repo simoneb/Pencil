@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using OpenFileSystem.IO;
 
@@ -25,6 +26,16 @@ namespace Pencil.Test.Stubs
         public string DefaultTarget
         {
             get { return DefaultTargetHandler(this); }
+        }
+
+        public IEnumerable<Target> Targets
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public void DisplayTargets(Logger logger)
+        {
+            throw new NotImplementedException();
         }
 
         public IFileSystem FileSystem

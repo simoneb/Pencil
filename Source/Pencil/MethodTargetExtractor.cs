@@ -1,16 +1,17 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Pencil
 {
-    static class MethodTargetExtractor
+    public static class MethodTargetExtractor
 	{
 		public static Dictionary<string, Target> GetTargets(IProject project)
 		{
 			var targets = new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
 			
-            foreach (var m in project.GetType().GetMethods().Where(m => m.DeclaringType != typeof (object)))
+            foreach (var m in GetSuitableMethods(project))
             {
                 try
                 {
@@ -25,5 +26,14 @@ namespace Pencil
 
 		    return targets;
 		}
+
+        private static IEnumerable<MethodInfo> GetSuitableMethods(IProject project)
+        {
+            var typesToExclude = new[] {typeof (Project), typeof (IProject), typeof (Object)};
+
+            return from method in project.GetType().GetMethods()
+                   where typesToExclude.None(t => t.Equals(method.DeclaringType))
+                   select method;
+        }
 	}
 }

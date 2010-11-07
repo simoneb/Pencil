@@ -20,5 +20,10 @@ namespace Pencil
         {
             return string.Join(separator, enumerable.ToArray());
         }
+
+        public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        {
+            return !enumerable.Any(predicate);
+        }
     }
 }

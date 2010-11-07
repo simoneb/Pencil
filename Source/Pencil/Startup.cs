@@ -17,33 +17,33 @@ namespace Pencil
 
 		    var parser = new PencilOptionsParser();
 
-		    IPencilOptions result;
+		    IPencilOptions options;
 
 		    try
 		    {
-		        result = parser.Parse(args);
+		        options = parser.Parse(args);
 		    }
 		    catch (OptionException e)
 		    {
-		        logger.Write(e.Message);
+		        logger.WriteLine(e.Message);
                 parser.Display(logger);
 		        return Program.Failure;
 		    }
 
-		    var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", result.CompilerVersion.CodePoviderName}});
-		    var compiler = new ProjectCompiler(logger, codeProvider, result.Assemblies.Union(GetDefaultAssemblies()));
+		    var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", options.CompilerVersion.CodePoviderName}});
+		    var compiler = new ProjectCompiler(logger, codeProvider, options.Assemblies.Union(GetDefaultAssemblies()));
 			var program = new Program(logger, compiler.ProjectFromFile);
 
 			var stopwatch = Stopwatch.StartNew();
 
             try
             {
-				return program.Run(result);
+				return program.Run(options);
             }
             finally
             {
                 stopwatch.Stop();
-                logger.Write("Total time: {0} seconds.", stopwatch.Elapsed.Seconds);
+                logger.WriteLine("Total time: {0} seconds.", stopwatch.Elapsed.Seconds);
             }
 		}
 

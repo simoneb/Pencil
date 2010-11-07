@@ -28,5 +28,7 @@ namespace Pencil
         public abstract bool IsDefault { get; }
 
         public abstract string Name { get; }
+
+        public abstract string Description { get; }
 	}
 }

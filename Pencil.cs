@@ -9,6 +9,7 @@ using Pencil.Tasks;
 public class PencilProject : Project
 {
     [DependsOn("Clean")]
+    [Description("Builds the project and produces the output binaries")]
 	public void Build()
 	{
 	    var msbuild = NewMSBuildTask();
@@ -22,6 +23,7 @@ public class PencilProject : Project
         msbuild.Execute();
     }
 
+    [Description("Cleans the artifacts generated during the build process")]
 	public void Clean()
 	{
         var msbuild = NewMSBuildTask();
@@ -40,6 +42,7 @@ public class PencilProject : Project
 
     [Default]
     [DependsOn("Build")]
+    [Description("Runs the tests")]
     public void Test()
     {
         new NUnitTask(FileSystem, Platform)
@@ -51,6 +54,7 @@ public class PencilProject : Project
 
     [DependsOn("Build")]
     [DependsOn("Test")]
+    [Description("Copies the output to the distribution folder")]
     public void Dist()
     {
         var dist = FileSystem.GetDirectory("dist");
@@ -65,6 +69,7 @@ public class PencilProject : Project
     }
 
     [DependsOn("Dist")]
+    [Description("Merges the output using ILMerge")]
     public void Merge()
     {
         const string ilmergeExe = @"Tools\ilmerge\SourceDir\ILMerge.exe";

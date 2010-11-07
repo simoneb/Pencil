@@ -28,6 +28,8 @@ namespace Pencil
 
         public CompilerVersion CompilerVersion { get; set; }
 
+        public bool ShowTargets { get; set; }
+
         public void Display(Logger logger)
         {
             parser.Display(logger);

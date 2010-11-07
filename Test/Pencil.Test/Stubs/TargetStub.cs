@@ -37,5 +37,10 @@ namespace Pencil.Test.Stubs
         {
             get { return GetType().Name; }
         }
+
+        public override string Description
+        {
+            get { return Name; }
+        }
     }
 }
