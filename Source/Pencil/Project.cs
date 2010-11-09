@@ -41,7 +41,6 @@ namespace Pencil
                     ? new string(' ', start - target.Name.Length + 2) + "# " + target.Description 
                     : string.Empty);
             }
-
         }
 
         public IFileSystem FileSystem { get { return New<IFileSystem>(); } }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Tasks;
 
 namespace Pencil.Test.Stubs
@@ -13,7 +12,7 @@ namespace Pencil.Test.Stubs
             Targets = targets;
         }
 
-        public ICollection<Path> Assemblies
+        public ICollection<string> Assemblies
         {
             get { throw new NotImplementedException(); }
         }

@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Reflection;
 using Mono.Options;
-using OpenFileSystem.IO.FileSystem.Local;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -14,7 +13,6 @@ namespace Pencil
 		static int Main(string[] args)
 		{
 		    var logger = new Logger(Console.Out);
-
 		    var parser = new PencilOptionsParser();
 
 		    IPencilOptions options;
@@ -47,10 +45,10 @@ namespace Pencil
             }
 		}
 
-        private static IEnumerable<Path> GetDefaultAssemblies()
+        private static IEnumerable<string> GetDefaultAssemblies()
 		{
-			yield return new Path(Assembly.GetExecutingAssembly().Location);
-			yield return new Path("System.dll");
+			yield return Assembly.GetExecutingAssembly().Location;
+			yield return "System.dll";
 		}
 	}
 }

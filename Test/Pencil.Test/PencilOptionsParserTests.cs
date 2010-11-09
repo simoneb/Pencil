@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenFileSystem.IO.FileSystem.Local;
 using System.Linq;
 
 namespace Pencil.Test
@@ -20,7 +19,7 @@ namespace Pencil.Test
         {
             var result = sut.Parse("-r:MyAssembly.dll");
 
-            CollectionAssert.AreEquivalent(new[]{new Path("MyAssembly.dll")}, result.Assemblies);
+            CollectionAssert.AreEquivalent(new[]{"MyAssembly.dll"}, result.Assemblies);
         }
 
         [Test]
@@ -28,7 +27,7 @@ namespace Pencil.Test
         {
             var result = sut.Parse("-r:MyAssembly.dll", "-r:MyOtherAssembly.dll");
 
-            CollectionAssert.AreEquivalent(new[] { new Path("MyAssembly.dll"), new Path("MyOtherAssembly.dll") }, result.Assemblies.ToArray());
+            CollectionAssert.AreEquivalent(new[] { "MyAssembly.dll", "MyOtherAssembly.dll" }, result.Assemblies.ToArray());
         }
 
         [Test]

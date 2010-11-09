@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using OpenFileSystem.IO.FileSystem.Local;
 using Pencil.Tasks;
 
 namespace Pencil
@@ -11,12 +10,12 @@ namespace Pencil
         public PencilOptions(PencilOptionsParser parser)
         {
             this.parser = parser;
-            Assemblies = new HashSet<Path>();
+            Assemblies = new HashSet<string>();
             Targets = new HashSet<string>();
             CompilerVersion = CompilerVersion.Default;
         }
 
-        public ICollection<Path> Assemblies { get; private set; }
+        public ICollection<string> Assemblies { get; private set; }
 
         public string BuildScript { get; set; }
 

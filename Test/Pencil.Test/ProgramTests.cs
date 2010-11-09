@@ -113,5 +113,13 @@ namespace Pencil.Test
 
             Assert.AreEqual(originalDirectory, project.Platform.CurrentDirectory);
         }
+
+        [Test]
+        public void Should_display_options_if_no_build_script_supplier()
+        {
+            var spyOptions = new SpyOptions { BuildScript = null };
+            Program.Run(spyOptions);
+            Assert.IsTrue(spyOptions.Displayed);
+        }
     }
 }

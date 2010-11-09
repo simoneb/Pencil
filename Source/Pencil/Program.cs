@@ -30,12 +30,17 @@ namespace Pencil
                 return Success;
             }
 
+            if(string.IsNullOrEmpty(options.BuildScript))
+            {
+                options.Display(logger);
+                return Success;
+            }
+
 		    var project = compiler(options.BuildScript);
 
 		    if(options.ShowTargets)
 		    {
 		        project.DisplayTargets(logger);
-
                 return Success;
             }
 

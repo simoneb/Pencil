@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Mono.Options;
-using OpenFileSystem.IO.FileSystem.Local;
 using System.Linq;
 using Pencil.Tasks;
 
@@ -20,7 +19,7 @@ namespace Pencil
                 { 
                     "r|reference=", 
                     "References the specified {ASSEMBLY} when compiling the build script", 
-                    x => result.Assemblies.Add(new Path(x)) 
+                    x => result.Assemblies.Add(x) 
                 },
                 { 
                     "c|compiler=", 

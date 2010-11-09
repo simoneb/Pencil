@@ -6,7 +6,7 @@ namespace Pencil
 {
     public interface IPencilOptions
     {
-        ICollection<Path> Assemblies { get; }
+        ICollection<string> Assemblies { get; }
         string BuildScript { get; }
         IEnumerable<string> Targets { get; }
         bool Help { get; set; }

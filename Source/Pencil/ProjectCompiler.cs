@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using System.Reflection;
-using OpenFileSystem.IO.FileSystem.Local;
+using System.Linq;
 
 namespace Pencil
 {
@@ -10,9 +10,9 @@ namespace Pencil
 	{
 		readonly CodeDomProvider codeProvider;
 		readonly Logger logger;
-		readonly IEnumerable<Path> referencedAssemblies;
+		readonly IEnumerable<string> referencedAssemblies;
 
-		public ProjectCompiler(Logger logger, CodeDomProvider codeProvider, IEnumerable<Path> referencedAssemblies)
+		public ProjectCompiler(Logger logger, CodeDomProvider codeProvider, IEnumerable<string> referencedAssemblies)
 		{
 			this.logger = logger;
 			this.codeProvider = codeProvider;
@@ -33,8 +33,7 @@ namespace Pencil
 		{
 			var options = new CompilerParameters {GenerateExecutable = false, GenerateInMemory = true};
 
-		    foreach (var assembly in referencedAssemblies)
-		        options.ReferencedAssemblies.Add(assembly.ToString());
+            options.ReferencedAssemblies.AddRange(referencedAssemblies.ToArray());
 
 		    return options;
 		}
