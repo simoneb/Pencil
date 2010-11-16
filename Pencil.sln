@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pencil.Test", "Test\Pencil.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pencil", "Source\Pencil\Pencil.csproj", "{07315A05-6F38-4AD9-9223-D68EE046A90B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pencil.NUnit", "Source\Pencil.NUnit\Pencil.NUnit.csproj", "{942F9118-C48C-49F0-AC32-220A77060AEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{07315A05-6F38-4AD9-9223-D68EE046A90B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{07315A05-6F38-4AD9-9223-D68EE046A90B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{07315A05-6F38-4AD9-9223-D68EE046A90B}.Release|x86.ActiveCfg = Release|Any CPU
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Debug|x86.ActiveCfg = Debug|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Debug|x86.Build.0 = Debug|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Release|Any CPU.ActiveCfg = Release|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Release|Mixed Platforms.Build.0 = Release|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Release|x86.ActiveCfg = Release|x86
+		{942F9118-C48C-49F0-AC32-220A77060AEB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
