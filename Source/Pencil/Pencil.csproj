@@ -57,6 +57,7 @@
     <Compile Include="Attributes\DefaultAttribute.cs" />
     <Compile Include="Attributes\DependsOnAttribute.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
+    <Compile Include="Include.cs" />
     <Compile Include="PencilOptionsParser.cs" />
     <Compile Include="CompilationFailedException.cs" />
     <Compile Include="DisposableAction.cs" />
