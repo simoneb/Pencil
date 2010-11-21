@@ -116,44 +116,4 @@ namespace Pencil
             return default(T);
         }
 	}
-
-    public class FutureProject : Future<IProject>
-    {
-        private readonly Project project;
-        private readonly string file;
-
-        public FutureProject(Project project, string file)
-        {
-            this.project = project;
-            this.file = file;
-        }
-
-        protected override IProject Evaluate()
-        {
-            var compiler = GetCompiler();
-            return compiler.Compile(file);
-        }
-
-        private IProjectCompiler GetCompiler()
-        {
-            return new CSharpProjectCompiler(project.Logger, project.ReferencedAssemblies, CompilerVersion.Default);
-        }
-    }
-
-    public abstract class Future<T>
-    {
-        private T result;
-        private bool evaluated;
-
-        public T Value { get { return evaluated ? result : EvaluateInternal(); } }
-
-        private T EvaluateInternal()
-        {
-            result = Evaluate();
-            evaluated = true;
-            return result;
-        }
-
-        protected abstract T Evaluate();
-    }
 }
