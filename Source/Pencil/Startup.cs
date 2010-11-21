@@ -1,10 +1,6 @@
-using System.Linq;
-using System.Reflection;
 using Mono.Options;
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using Microsoft.CSharp;
 
 namespace Pencil
 {
@@ -28,9 +24,8 @@ namespace Pencil
 		        return Program.Failure;
 		    }
 
-		    var codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", options.CompilerVersion.CodePoviderName}});
-		    var compiler = new ProjectCompiler(logger, codeProvider, options.Assemblies.Union(GetDefaultAssemblies()));
-			var program = new Program(logger, compiler.ProjectFromFile);
+		    var compiler = new CSharpProjectCompiler(logger, options.Assemblies, options.CompilerVersion);
+			var program = new Program(logger, compiler);
 
 			var stopwatch = Stopwatch.StartNew();
 
@@ -43,12 +38,6 @@ namespace Pencil
                 stopwatch.Stop();
                 logger.WriteLine("Total time: {0} seconds.", stopwatch.Elapsed.Seconds);
             }
-		}
-
-        private static IEnumerable<string> GetDefaultAssemblies()
-		{
-			yield return Assembly.GetExecutingAssembly().Location;
-			yield return "System.dll";
 		}
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Pencil.Tasks
+namespace Pencil
 {
     public class CompilerVersion : IEquatable<CompilerVersion>
     {

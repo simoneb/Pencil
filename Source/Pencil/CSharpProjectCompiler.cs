@@ -3,23 +3,33 @@ using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Linq;
+using Microsoft.CSharp;
 
 namespace Pencil
 {
-	class ProjectCompiler
-	{
+    class CSharpProjectCompiler : IProjectCompiler
+    {
 		readonly CodeDomProvider codeProvider;
 		readonly Logger logger;
 		readonly IEnumerable<string> referencedAssemblies;
 
-		public ProjectCompiler(Logger logger, CodeDomProvider codeProvider, IEnumerable<string> referencedAssemblies)
+		public CSharpProjectCompiler(Logger logger, IEnumerable<string> referencedAssemblies, CompilerVersion compilerVersion)
 		{
 			this.logger = logger;
-			this.codeProvider = codeProvider;
-			this.referencedAssemblies = referencedAssemblies;
+			codeProvider = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion", compilerVersion.CodePoviderName}});
+			this.referencedAssemblies = referencedAssemblies.Union(DefaultAssemblies);
 		}
+        
+        private static IEnumerable<string> DefaultAssemblies
+        {
+            get
+            {
+                yield return Assembly.GetExecutingAssembly().Location;
+                yield return "System.dll";
+            }
+        }
 
-		public IProject ProjectFromFile(string path)
+		public IProject Compile(string path)
 		{
 			var result = codeProvider.CompileAssemblyFromFile(GetCompilerParameters(), path);
 
@@ -45,6 +55,7 @@ namespace Pencil
 				{
 					var project = (Project)item.GetConstructor(Type.EmptyTypes).Invoke(null);
 					project.Logger = logger;
+				    project.ReferencedAssemblies.AddRange(referencedAssemblies);
 					return project;
 				}
 

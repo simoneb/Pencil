@@ -41,6 +41,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IncludeScript.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="IncludeTests.cs" />
     <Compile Include="MethodTargetExtractorTest.cs" />
     <Compile Include="PencilOptionsParserTests.cs" />

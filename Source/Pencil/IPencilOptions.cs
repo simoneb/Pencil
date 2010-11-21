@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using OpenFileSystem.IO.FileSystem.Local;
-using Pencil.Tasks;
 
 namespace Pencil
 {

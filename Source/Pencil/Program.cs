@@ -11,9 +11,9 @@ namespace Pencil
 		public const int Failure = 1;
 
 		readonly Logger logger;
-		readonly Converter<string, IProject> compiler;
+		readonly IProjectCompiler compiler;
 
- 		public Program(Logger logger, Converter<string, IProject> compiler)
+ 		public Program(Logger logger, IProjectCompiler compiler)
 		{
 			this.logger = logger;
 			this.compiler = compiler;
@@ -36,7 +36,7 @@ namespace Pencil
                 return Success;
             }
 
-		    var project = compiler(options.BuildScript);
+		    var project = compiler.Compile(options.BuildScript);
 
 		    if(options.ShowTargets)
 		    {

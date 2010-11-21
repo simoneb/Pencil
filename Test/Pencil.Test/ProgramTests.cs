@@ -7,7 +7,7 @@ namespace Pencil.Test
     [TestFixture]
     public class ProgramTests
     {
-        private static Program Program { get { return new Program(Logger.Null, x => null); } }
+        private static Program Program { get { return new Program(Logger.Null, new NullProjectCompiler()); } }
 
         [Test]
         public void BuildTarget_should_return_Failure_if_target_not_in_Project()
@@ -33,7 +33,7 @@ namespace Pencil.Test
             project.HasTargetHandler = x => true;
             project.RunHandler = built.Add;
 
-			new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile", "Target1", "Target2"));
+			new Program(Logger.Null, new StubProjectCompiler(project)).Run(new StubOptions("BuildFile", "Target1", "Target2"));
 
 			built.ShouldEqual(new[]{ "Target1", "Target2" });
         }
@@ -47,7 +47,7 @@ namespace Pencil.Test
             project.RunHandler = built.Add;
             project.DefaultTargetHandler = x => "Target1";
 
-            new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile"));
+            new Program(Logger.Null, new StubProjectCompiler(project)).Run(new StubOptions("BuildFile"));
 
             built.ShouldEqual(new[] { "Target1" });
         }
@@ -61,7 +61,7 @@ namespace Pencil.Test
             project.RunHandler = built.Add;
             project.DefaultTargetHandler = x => null;
 
-            new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile"));
+            new Program(Logger.Null, new StubProjectCompiler(project)).Run(new StubOptions("BuildFile"));
 
             built.ShouldBeEmpty();
         }
@@ -75,7 +75,7 @@ namespace Pencil.Test
             project.RunHandler = built.Add;
             project.DefaultTargetHandler = x => "Default";
 
-            new Program(Logger.Null, x => project).Run(new StubOptions("BuildFile", "Target1", "Target2" ));
+            new Program(Logger.Null, new StubProjectCompiler(project)).Run(new StubOptions("BuildFile", "Target1", "Target2" ));
 
             Assert.That(built, Contains.Item("Target1").And.Contains("Target2"));
             CollectionAssert.DoesNotContain(built, "Default");
@@ -93,7 +93,7 @@ namespace Pencil.Test
             string projectCurrentDirectory = null;
             project.RunHandler = s => projectCurrentDirectory = project.Platform.CurrentDirectory;
             
-            new Program(Logger.Null, x => project).Run(new StubOptions(@"path\to\BuildFile", "whatever"));
+            new Program(Logger.Null, new StubProjectCompiler(project)).Run(new StubOptions(@"path\to\BuildFile", "whatever"));
 
             StringAssert.EndsWith(@"path\to", projectCurrentDirectory);
         }
@@ -109,17 +109,40 @@ namespace Pencil.Test
 
             var originalDirectory = project.Platform.CurrentDirectory;
 
-            new Program(Logger.Null, x => project).Run(new StubOptions(@"path\to\BuildFile", "whatever" ));
+            new Program(Logger.Null, new StubProjectCompiler(project)).Run(new StubOptions(@"path\to\BuildFile", "whatever" ));
 
             Assert.AreEqual(originalDirectory, project.Platform.CurrentDirectory);
         }
 
         [Test]
-        public void Should_display_options_if_no_build_script_supplier()
+        public void Should_display_options_if_no_build_script_supplied()
         {
             var spyOptions = new SpyOptions { BuildScript = null };
             Program.Run(spyOptions);
             Assert.IsTrue(spyOptions.Displayed);
+        }
+    }
+
+    public class StubProjectCompiler : IProjectCompiler
+    {
+        private readonly IProject project;
+
+        public StubProjectCompiler(IProject project)
+        {
+            this.project = project;
+        }
+
+        public IProject Compile(string path)
+        {
+            return project;
+        }
+    }
+
+    internal class NullProjectCompiler : IProjectCompiler
+    {
+        public IProject Compile(string path)
+        {
+            return null;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Pencil.Test
 		    Assert.That(new[]{ "Build", "Test"}, Is.EquivalentTo(target.GetDependencies().ToArray()));
 		}
 
-	    private MethodTarget GetTarget(string name)
+	    private static MethodTarget GetTarget(string name)
 	    {
 	        var project = new MyProject();
 	        return new MethodTarget(project, project.GetType().GetMethod(name));

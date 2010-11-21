@@ -14,8 +14,9 @@ namespace Pencil
 		readonly HashSet<string> done = new HashSet<string>();
 		internal Logger Logger = new Logger(TextWriter.Null);
 		readonly ZeptoContainer container = new ZeptoContainer();
+        private ICollection<FutureProject> includes = new List<FutureProject>();
 
-		public Project()
+        public Project()
 		{
 			targets = MethodTargetExtractor.GetTargets(this);
 		}
@@ -85,9 +86,74 @@ namespace Pencil
             get { return !string.IsNullOrEmpty(DefaultTarget); }
 	    }
 
+        public List<string> ReferencedAssemblies = new List<string>();
+
         protected void Call(Action target)
         {
             Run(MethodTarget.GetTargetName(target.Method));
         }
+
+        protected void Pencil(string buildScript, string target){}
+
+        protected void Include(string file)
+        {
+            if(!File.Exists(file))
+                throw new InvalidOperationException();
+
+            includes.Add(new FutureProject(this, file));
+        }
+
+        protected T Property<T>(string name)
+        {
+            foreach (var futureProject in includes)
+            {
+                var propertyInfo = futureProject.Value.GetType().GetProperty(name, typeof(T));
+        
+                if (propertyInfo != null)
+                    return (T) propertyInfo.GetValue(futureProject.Value, null);
+            }
+
+            return default(T);
+        }
 	}
+
+    public class FutureProject : Future<IProject>
+    {
+        private readonly Project project;
+        private readonly string file;
+
+        public FutureProject(Project project, string file)
+        {
+            this.project = project;
+            this.file = file;
+        }
+
+        protected override IProject Evaluate()
+        {
+            var compiler = GetCompiler();
+            return compiler.Compile(file);
+        }
+
+        private IProjectCompiler GetCompiler()
+        {
+            return new CSharpProjectCompiler(project.Logger, project.ReferencedAssemblies, CompilerVersion.Default);
+        }
+    }
+
+    public abstract class Future<T>
+    {
+        private T result;
+        private bool evaluated;
+
+        public T Value { get { return evaluated ? result : EvaluateInternal(); } }
+
+        private T EvaluateInternal()
+        {
+            result = Evaluate();
+            evaluated = true;
+            return result;
+        }
+
+        protected abstract T Evaluate();
+    }
 }
