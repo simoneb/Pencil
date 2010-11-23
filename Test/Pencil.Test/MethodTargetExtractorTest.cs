@@ -11,6 +11,8 @@ namespace Pencil.Test
         class MyProj : BaseProject
         {
             public void Target(){}
+
+            public string MyProp { get; set; }
         }
 
         internal class BaseProject : Project
@@ -36,6 +38,14 @@ namespace Pencil.Test
         public void Should_not_get_Object_methods()
         {
             Assert.That(targets, Has.No.Member(("ToString")));
+        }
+
+        [Test]
+        public void Should_not_get_properties()
+        {
+            Assert.That(targets, Has.No.Member("get_MyProp"));
+            Assert.That(targets, Has.No.Member("set_MyProp"));
+            Assert.That(targets, Has.No.Member("MyProp"));
         }
 
         [Test]

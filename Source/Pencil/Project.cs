@@ -10,30 +10,30 @@ namespace Pencil
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 	public class Project : IProject
 	{
-		readonly Dictionary<string, Target> targets;
+		readonly Dictionary<string, Target> targetsByName;
 		readonly HashSet<string> done = new HashSet<string>();
-		internal Logger Logger = new Logger(TextWriter.Null);
-		readonly ZeptoContainer container = new ZeptoContainer();
+        readonly ZeptoContainer container = new ZeptoContainer();
         private ICollection<FutureProject> includes = new List<FutureProject>();
 
         public Project()
-		{
-			targets = MethodTargetExtractor.GetTargets(this);
-		}
+        {
+            Logger = new Logger(TextWriter.Null);
+            targetsByName = MethodTargetExtractor.GetTargets(this);
+        }
 
-	    public string DefaultTarget
+        public string DefaultTarget
 	    {
-            get { return targets.FirstOrDefault(t => t.Value.IsDefault).Key; }
+            get { return targetsByName.FirstOrDefault(t => t.Value.IsDefault).Key; }
 	    }
 
         public IEnumerable<Target> Targets
         {
-            get { return targets.Values; }
+            get { return targetsByName.Values; }
         }
 
         public void DisplayTargets(Logger logger)
         {
-            var start = targets.Keys.Select(t => t.Length).OrderByDescending(x => x).First();
+            var start = targetsByName.Keys.Select(t => t.Length).OrderByDescending(x => x).First();
 
             foreach (var target in Targets)
             {
@@ -54,7 +54,7 @@ namespace Pencil
 
 		public bool HasTarget(string name)
 		{
-			return targets.ContainsKey(name);
+			return targetsByName.ContainsKey(name);
 		}
 
 		public void Run(string targetName)
@@ -62,7 +62,9 @@ namespace Pencil
 			if(done.Contains(targetName))
 				return;
 
-		    var target = targets[targetName];
+		    LoadIncludeTargets();
+
+		    var target = targetsByName[targetName];
 		    var realTargetName = target.Name;
 
 		    Logger.WriteLine("{0}:", realTargetName);
@@ -74,7 +76,19 @@ namespace Pencil
 			}
 		}
 
-		protected virtual void RunCore(Target target)
+        private void LoadIncludeTargets()
+        {
+            if (includeTargetsLoaded)
+                return;
+
+            foreach (var futureProject in includes)
+                foreach (var t in MethodTargetExtractor.GetTargets(futureProject.Value))
+                    targetsByName.Add(t.Key, t.Value);
+
+            includeTargetsLoaded = true;
+        }
+
+        protected virtual void RunCore(Target target)
 		{
 			target.Execute();
 		}
@@ -86,7 +100,10 @@ namespace Pencil
             get { return !string.IsNullOrEmpty(DefaultTarget); }
 	    }
 
+        public Logger Logger { get; set; }
+
         public List<string> ReferencedAssemblies = new List<string>();
+        private bool includeTargetsLoaded;
 
         protected void Call(Action target)
         {

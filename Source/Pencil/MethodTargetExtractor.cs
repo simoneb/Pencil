@@ -33,6 +33,7 @@ namespace Pencil
 
             return from method in project.GetType().GetMethods()
                    where typesToExclude.None(t => t.Equals(method.DeclaringType))
+                   where !method.IsSpecialName
                    select method;
         }
 	}

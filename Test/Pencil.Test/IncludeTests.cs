@@ -16,6 +16,11 @@ namespace Pencil.Test
                 Include(includePath);
             }
 
+            public void MyTarget()
+            {
+                Logger.WriteLine("My output");
+            }
+
             public int IncludeProperty
             {
                 get { return Property<int>("IncludeProperty"); }
@@ -43,5 +48,36 @@ namespace Pencil.Test
         {
             Assert.AreEqual(2, project.IncludeProperty);
         }
+
+        [Test]
+        public void Should_call_target_in_included_script()
+        {
+            var spyLogger = new SpyLogger();
+            project.Logger = spyLogger;
+            project.Run("IncludeTarget");
+
+            Assert.That(spyLogger.Written, Contains.Substring("Include output"));
+        }
+
+        [Test]
+        public void Should_call_target_in_included_script_and_then_own_target()
+        {
+            var spyLogger = new SpyLogger();
+            project.Logger = spyLogger;
+            project.Run("IncludeTarget");
+            project.Run("MyTarget");
+
+            Assert.That(spyLogger.Written, Contains.Substring("Include output"));
+            Assert.That(spyLogger.Written, Contains.Substring("My output"));
+        }
+    }
+
+    public class SpyLogger : Logger
+    {
+        public SpyLogger() : base(new StringWriter())
+        {
+        }
+
+        public string Written { get { return ((StringWriter) Target).GetStringBuilder().ToString(); } }
     }
 }
