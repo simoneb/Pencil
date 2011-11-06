@@ -79,7 +79,7 @@ namespace Pencil
 	        return Success;
 	    }
 
-	    public int BuildTarget(IProject project, string target)
+	    internal int BuildTarget(IProject project, string target)
 		{
             try
             {

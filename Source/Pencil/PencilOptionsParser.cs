@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mono.Options;
 using System.Linq;
-using Pencil.Tasks;
 
 namespace Pencil
 {

@@ -2,12 +2,12 @@
 {
     public class FutureProject : Future<IProject>
     {
-        private readonly Project project;
+        private readonly IProject parent;
         private readonly string file;
 
-        public FutureProject(Project project, string file)
+        public FutureProject(IProject parent, string file)
         {
-            this.project = project;
+            this.parent = parent;
             this.file = file;
         }
 
@@ -19,7 +19,7 @@
 
         private IProjectCompiler GetCompiler()
         {
-            return new CSharpProjectCompiler(project.Logger, project.ReferencedAssemblies, CompilerVersion.Default);
+            return new CSharpProjectCompiler(parent.Logger, parent.ReferencedAssemblies, CompilerVersion.Default);
         }
     }
 }

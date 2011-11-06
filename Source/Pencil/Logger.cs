@@ -3,8 +3,8 @@ using System.IO;
 
 namespace Pencil
 {
-    public class Logger
-	{
+    public class Logger : ILogger
+    {
 		public static readonly Logger Null = new Logger(TextWriter.Null);
 
 	    string indentation = string.Empty;

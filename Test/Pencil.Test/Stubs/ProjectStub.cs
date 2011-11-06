@@ -33,6 +33,16 @@ namespace Pencil.Test.Stubs
             get { throw new NotImplementedException(); }
         }
 
+        public ILogger Logger
+        {
+            get { return Pencil.Logger.Null; }
+        }
+
+        public IList<string> ReferencedAssemblies
+        {
+            get { return new List<string>(); }
+        }
+
         public void DisplayTargets(Logger logger)
         {
             throw new NotImplementedException();

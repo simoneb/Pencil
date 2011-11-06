@@ -10,6 +10,8 @@ namespace Pencil
         bool HasDefaultTarget { get; }
         string DefaultTarget { get; }
         IEnumerable<Target> Targets { get; }
+        ILogger Logger { get; }
+        IList<string> ReferencedAssemblies { get; }
         void DisplayTargets(Logger logger);
     }
 }

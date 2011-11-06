@@ -100,9 +100,14 @@ namespace Pencil
             get { return !string.IsNullOrEmpty(DefaultTarget); }
 	    }
 
-        public Logger Logger { get; set; }
+        public ILogger Logger { get; set; }
 
-        public List<string> ReferencedAssemblies = new List<string>();
+        public IList<string> ReferencedAssemblies
+        {
+            get { return referencedAssemblies; }
+        }
+
+        private List<string> referencedAssemblies = new List<string>();
         private bool includeTargetsLoaded;
 
         protected void Call(Action target)
