@@ -44,17 +44,22 @@ namespace Pencil
                 return Success;
             }
 
-		    var fileSystem = LocalFileSystem.Instance;
-		    var platform = new ExecutionEnvironment(logger);
-
-		    project.Register(fileSystem);
-		    project.Register<IExecutionEnvironment>(platform);
-
-		    var buildFilePath = fileSystem.GetFile(options.BuildScript).Parent.Path.ToString();
-
-            using (Pushd(buildFilePath, platform))
-                return Run(options.Targets, project);
+		    return Run(options, project);
 		}
+
+	    private int Run(IPencilOptions options, IProject project)
+	    {
+	        var fileSystem = LocalFileSystem.Instance;
+	        var platform = new ExecutionEnvironment(logger);
+
+	        project.Register(fileSystem);
+	        project.Register<IExecutionEnvironment>(platform);
+
+	        var buildFilePath = fileSystem.GetFile(options.BuildScript).Parent.Path.ToString();
+
+	        using (Pushd(buildFilePath, platform))
+	            return Run(options.Targets, project);
+	    }
 
 	    private static IDisposable Pushd(string directory, IExecutionEnvironment platform)
 	    {
