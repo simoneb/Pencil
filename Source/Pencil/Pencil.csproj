@@ -53,6 +53,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractProjectCompiler.cs" />
     <Compile Include="Annotations\Annotations.cs" />
     <Compile Include="Attributes\DefaultAttribute.cs" />
     <Compile Include="Attributes\DependsOnAttribute.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="FutureProject.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IProjectCompiler.cs" />
+    <Compile Include="JScriptProjectCompiler.cs" />
     <Compile Include="PencilOptionsParser.cs" />
     <Compile Include="CompilationFailedException.cs" />
     <Compile Include="DisposableAction.cs" />

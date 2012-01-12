@@ -2,6 +2,6 @@
 {
     public interface IProjectCompiler
     {
-        IProject Compile(string path);
+        IProject Compile(string scriptPath);
     }
 }

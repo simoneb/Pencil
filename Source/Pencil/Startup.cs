@@ -1,3 +1,4 @@
+using System.IO;
 using Mono.Options;
 using System;
 using System.Diagnostics;
@@ -24,7 +25,7 @@ namespace Pencil
 		        return Program.Failure;
 		    }
 
-		    var compiler = new CSharpProjectCompiler(logger, options.Assemblies, options.CompilerVersion);
+		    var compiler = GetCompiler(options, logger);
 			var program = new Program(logger, compiler);
 
 			var stopwatch = Stopwatch.StartNew();
@@ -39,5 +40,19 @@ namespace Pencil
                 logger.WriteLine("Total time: {0} seconds.", stopwatch.Elapsed.Seconds);
             }
 		}
+
+        private static IProjectCompiler GetCompiler(IPencilOptions options, Logger logger)
+        {
+
+            switch (Path.GetExtension(options.BuildScript))
+            {
+                case ".cs":
+                    return new CSharpProjectCompiler(logger, options.Assemblies, options.CompilerVersion);
+                case ".js":
+                    return new JScriptProjectCompiler(logger, options.Assemblies);
+                default:
+                    throw new NotSupportedException(options.BuildScript);
+            }
+        }
 	}
 }

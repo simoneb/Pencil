@@ -132,7 +132,7 @@ namespace Pencil.Test
             this.project = project;
         }
 
-        public IProject Compile(string path)
+        public IProject Compile(string scriptPath)
         {
             return project;
         }
@@ -140,7 +140,7 @@ namespace Pencil.Test
 
     internal class NullProjectCompiler : IProjectCompiler
     {
-        public IProject Compile(string path)
+        public IProject Compile(string scriptPath)
         {
             return null;
         }
