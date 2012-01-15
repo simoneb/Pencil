@@ -26,7 +26,7 @@ namespace Pencil.Tasks
 
         protected virtual void CompileCore()
         {
-            Execute();
+            Run();
         }
     }
 }

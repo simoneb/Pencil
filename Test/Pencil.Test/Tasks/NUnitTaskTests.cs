@@ -45,7 +45,7 @@ namespace Pencil.Test.Tasks
 		    var nunit = new NUnitTask(fileSystem, environment);
 
 			environment.RunHandler += (p, args, x) => args.StartsWith(nunit.NUnitPath.ToString()).ShouldBe(true);
-			nunit.Execute();
+			nunit.Run();
 		}
 		[Test]
 		public void Arguments_should_contain_Target()
@@ -54,7 +54,7 @@ namespace Pencil.Test.Tasks
             var environment = new ExecutionEnvironmentStub();
 			var nunit = new NUnitTask(fileSystem, environment) {Target = new Path("MyTests.dll")};
 		    environment.RunHandler += (p, args, x) => args.Contains("MyTests.dll").ShouldBe(true);
-			nunit.Execute();
+			nunit.Run();
 		}
 		[Test]
 		public void Should_support_disabling_shadow_copy()
@@ -63,7 +63,7 @@ namespace Pencil.Test.Tasks
             var environment = new ExecutionEnvironmentStub();
 			var nunit = new NUnitTask(fileSystem, environment) {ShadowCopy = false};
 		    environment.RunHandler += (p, args, x) => args.Contains("-noshadow").ShouldBe(true);
-			nunit.Execute();
+			nunit.Run();
 		}
 		[Test]
 		public void Should_support_disabling_logo()
@@ -75,7 +75,7 @@ namespace Pencil.Test.Tasks
 			{
 				args.Contains("-nologo").ShouldBe(true);
 			};
-			nunit.Execute();
+			nunit.Run();
 		}
 	}
 }

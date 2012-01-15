@@ -33,7 +33,7 @@ namespace Pencil.Test.Tasks
 				arguments.Contains(" /optimize+").ShouldBe(true);
 			};
 			compiler.Output = new Path("MyAssembly.dll");
-			compiler.Execute();
+			compiler.Run();
     	}
 
         [TestCase("v3.5", "v3.5")]
@@ -50,7 +50,7 @@ namespace Pencil.Test.Tasks
             };
 
             compiler.Output = new Path("MyAssembly.dll");
-            compiler.Execute();
+            compiler.Run();
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Pencil.Test.Tasks
         {
 			var outDir = new Path("Build").Combine("Debug");
             compiler.Output = outDir.Combine("Pencil.Build.dll");
-            compiler.Execute();
+            compiler.Run();
 
             fileSystem.GetDirectory(outDir.FullPath).Exists.ShouldBe(true);
         }
@@ -72,7 +72,7 @@ namespace Pencil.Test.Tasks
 
             fileSystem.GetDirectory(outDir.FullPath).MustExist();
             fileSystem.GetFile("Foo.dll").MustExist();
-            compiler.Execute();
+            compiler.Run();
 
             Assert.IsTrue(fileSystem.GetFile(outDir.Combine("Foo.dll").FullPath).Exists);
         }
@@ -92,7 +92,7 @@ namespace Pencil.Test.Tasks
             //{
             //    Assert.Fail("Should not try to copy file already present.");
             //};
-            compiler.Execute();
+            compiler.Run();
         }
     }
 }

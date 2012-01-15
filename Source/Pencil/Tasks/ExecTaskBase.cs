@@ -19,7 +19,7 @@ namespace Pencil.Tasks
 
         public bool ShowCommandLine { get; set; }
 
-        public void Execute()
+        public void Run()
         {
             var fileName = Program.ToString();
             var arguments = GetArguments();

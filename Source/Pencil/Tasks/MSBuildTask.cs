@@ -9,17 +9,17 @@ namespace Pencil.Tasks
     {
         protected MSBuildTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
-            Targets = new string[0];
-            Properties = new List<KeyValuePair<string, string>>();
+            Targets = new List<string>();
+            Properties = new Dictionary<string, string>();
         }
 
         public string ProjectFile { get; set; }
-        public string[] Targets { get; set; }
-        private IList<KeyValuePair<string, string>> Properties { get; set; }
+        public IList<string> Targets { get; set; }
+        public IDictionary<string, string> Properties { get; private set; }
 
         public void AddProperty(string name, string value)
         {
-            Properties.Add(new KeyValuePair<string, string>(name, value));
+            Properties.Add(name, value);
         }
 
         public MSBuildVerbosity? Verbosity { get; set; }
@@ -48,7 +48,7 @@ namespace Pencil.Tasks
             var builder = new CommandLineBuilder();
 
             if (Targets.Any())
-                builder.Append("target", string.Join(";", Targets));
+                builder.Append("target", string.Join(";", Targets.ToArray()));
 
             foreach (var property in Properties)
                 builder.Append("property", string.Format("{0}={1}", property.Key, property.Value));

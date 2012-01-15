@@ -38,7 +38,7 @@ namespace Pencil.Test.Tasks
             var fileSystem = new InMemoryFileSystem();
             platform.RunHandler = (program, args, handler) => handler(process);
             var task = new TestTask(fileSystem, platform);
-            task.Execute();
+            task.Run();
         }
     }
 }

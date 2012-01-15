@@ -11,30 +11,24 @@ public class PencilProject : Project
     [DependsOn("Clean")]
     [Description("Builds the project and produces the output binaries")]
 	public void Build()
-	{
-	    var msbuild = NewMSBuildTask();
-        msbuild.ShowCommandLine = true;
-	    msbuild.ProjectFile = "Pencil.sln";
-        msbuild.AddProperty("Configuration", "Release");
-        msbuild.AddProperty("Platform", "Any CPU");
-        msbuild.Verbosity = MSBuildVerbosity.Quiet;
-	    msbuild.Targets = new[] {"Rebuild"};
-
-        msbuild.Execute();
+    {
+        new MSBuild40Task(FileSystem, Platform) {
+            ShowCommandLine = true,
+            ProjectFile = "Pencil.sln",
+            Properties = {{"Configuration", "Release"}, {"Platform", "Any CPU"}},
+            Verbosity = MSBuildVerbosity.Quiet,
+            Targets = {"Rebuild"} }.Run();
     }
 
     [Description("Cleans the artifacts generated during the build process")]
 	public void Clean()
 	{
-        var msbuild = NewMSBuildTask();
-        msbuild.ShowCommandLine = true;
-        msbuild.ProjectFile = "Pencil.sln";
-        msbuild.AddProperty("Configuration", "Release");
-        msbuild.AddProperty("Platform", "Any CPU");
-        msbuild.Verbosity = MSBuildVerbosity.Quiet;
-        msbuild.Targets = new[] { "Clean" };
-
-        msbuild.Execute();
+        new MSBuild40Task(FileSystem, Platform) {
+            ShowCommandLine = true,
+            ProjectFile = "Pencil.sln",
+            Properties = {{"Configuration", "Release"}, {"Platform", "Any CPU"}},
+            Verbosity = MSBuildVerbosity.Quiet,
+            Targets = {"Clean"} }.Run();
 
         FileSystem.GetDirectory("dist").Delete();
         FileSystem.GetDirectory("merged").Delete();
@@ -45,11 +39,9 @@ public class PencilProject : Project
     [Description("Runs the tests")]
     public void Test()
     {
-        new NUnitTask(FileSystem, Platform)
-        {
+        new NUnitTask(FileSystem, Platform) {
             NUnitBinPath = new Path(@"Tools\NUnit"),
-            Target = new Path(@"Test\Pencil.Test\bin\Release\Pencil.Test.dll")
-        }.Execute();
+            Target = new Path(@"Test\Pencil.Test\bin\Release\Pencil.Test.dll") }.Run();
     }
 
     [DependsOn("Build")]
@@ -91,7 +83,7 @@ public class PencilProject : Project
         {
             Arguments = commandLine,
             ShowCommandLine = true
-        }.Execute();
+        }.Run();
     }
 
     private void ExtractILMerge(string msiPath, string destinationDirectory)
@@ -102,7 +94,7 @@ public class PencilProject : Project
         {
             Arguments = "/x " + msiPath + " " + destinationDirectory,
             ShowCommandLine = true
-        }.Execute();
+        }.Run();
     }
 
     private string DownloadILMerge(IDirectory destination)
@@ -113,10 +105,5 @@ public class PencilProject : Project
             c.DownloadFile("http://download.microsoft.com/download/1/3/4/1347C99E-9DFB-4252-8F6D-A3129A069F79/ILMerge.msi", destinationFile);
 
         return destinationFile;
-    }
-
-    MSBuild3540Task NewMSBuildTask()
-    {
-        return new MSBuild40Task(FileSystem, Platform);
     }
 }

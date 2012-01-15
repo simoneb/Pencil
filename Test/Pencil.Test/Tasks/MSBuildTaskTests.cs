@@ -43,7 +43,7 @@ namespace Pencil.Test.Tasks
                                                   Assert.That(arguments, Contains.Substring(expectedChoice));
                                               };
 
-            task.Execute();
+            task.Run();
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace Pencil.Test.Tasks
                                                   Assert.That(arguments, Contains.Substring(stringToLookFor));
                                               };
 
-            task.Execute();
+            task.Run();
         }
 
         protected void CheckArgumentMissing(string argument)
@@ -115,7 +115,7 @@ namespace Pencil.Test.Tasks
                 arguments.Contains(argument).ShouldBe(false);
             };
 
-            task.Execute();
+            task.Run();
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace Pencil.Test.Tasks
                 Assert.That(fileName, Contains.Substring(ExpectedMSBuildPathFragment));
             };
 
-            task.Execute();
+            task.Run();
         }
 
         protected abstract string ExpectedMSBuildPathFragment { get; }
