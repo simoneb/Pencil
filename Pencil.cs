@@ -12,7 +12,7 @@ public class PencilProject : Project
     [Description("Builds the project and produces the output binaries")]
 	public void Build()
     {
-        new MSBuild40Task(FileSystem, Platform) {
+        new MSBuild40Task {
             ShowCommandLine = true,
             ProjectFile = "Pencil.sln",
             Properties = {{"Configuration", "Release"}, {"Platform", "Any CPU"}},
@@ -23,7 +23,7 @@ public class PencilProject : Project
     [Description("Cleans the artifacts generated during the build process")]
 	public void Clean()
 	{
-        new MSBuild40Task(FileSystem, Platform) {
+        new MSBuild40Task {
             ShowCommandLine = true,
             ProjectFile = "Pencil.sln",
             Properties = {{"Configuration", "Release"}, {"Platform", "Any CPU"}},
@@ -39,7 +39,7 @@ public class PencilProject : Project
     [Description("Runs the tests")]
     public void Test()
     {
-        new NUnitTask(FileSystem, Platform) {
+        new NUnitTask {
             NUnitBinPath = new Path(@"Tools\NUnit"),
             Target = new Path(@"Test\Pencil.Test\bin\Release\Pencil.Test.dll") }.Run();
     }
@@ -79,7 +79,7 @@ public class PencilProject : Project
         var commandLine = string.Format(@"/t:exe /xmldocs /out:{0}\Pencil.exe {1}\Pencil.exe {1}\OpenFileSystem.dll",
                                       output, "dist");
 
-        new ExecTask(FileSystem, Platform, new Path(ilmergeExe))
+        new ExecTask(new Path(ilmergeExe))
         {
             Arguments = commandLine,
             ShowCommandLine = true
@@ -90,8 +90,7 @@ public class PencilProject : Project
     {
         FileSystem.GetDirectory(destinationDirectory).MustExist();
 
-        new ExecTask(FileSystem, Platform, new Path(@"Tools\lessmsi\lessmsi.exe"))
-        {
+        new ExecTask(new Path(@"Tools\lessmsi\lessmsi.exe")) {
             Arguments = "/x " + msiPath + " " + destinationDirectory,
             ShowCommandLine = true
         }.Run();

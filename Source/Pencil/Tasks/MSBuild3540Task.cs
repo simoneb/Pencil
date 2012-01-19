@@ -5,7 +5,11 @@ namespace Pencil.Tasks
 {
     public abstract class MSBuild3540Task : MSBuildTask
     {
-        protected MSBuild3540Task(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
+        protected MSBuild3540Task()
+        {
+        }
+
+        internal MSBuild3540Task(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
         }
 

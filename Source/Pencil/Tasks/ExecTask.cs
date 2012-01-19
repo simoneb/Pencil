@@ -7,7 +7,12 @@ namespace Pencil.Tasks
 	{
 	    private readonly Path program;
 
-	    public ExecTask(IFileSystem fileSystem, IExecutionEnvironment platform, Path program) : base(fileSystem, platform)
+	    public ExecTask(Path program)
+	    {
+	        this.program = program;
+	    }
+
+	    internal ExecTask(IFileSystem fileSystem, IExecutionEnvironment platform, Path program) : base(fileSystem, platform)
 	    {
 	        this.program = program;
 	    }

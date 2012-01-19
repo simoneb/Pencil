@@ -7,7 +7,13 @@ namespace Pencil.Tasks
 {
     public abstract class MSBuildTask : ExecTaskBase
     {
-        protected MSBuildTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
+        protected MSBuildTask()
+        {
+            Targets = new List<string>();
+            Properties = new Dictionary<string, string>();
+        }
+
+        internal MSBuildTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
             Targets = new List<string>();
             Properties = new Dictionary<string, string>();

@@ -55,6 +55,9 @@ namespace Pencil
 	        project.Register(fileSystem);
 	        project.Register<IExecutionEnvironment>(platform);
 
+	        ProjectContext.FileSystem = fileSystem;
+	        ProjectContext.ExecutionEnvironment = platform;
+
 	        var buildFilePath = fileSystem.GetFile(options.BuildScript).Parent.Path.ToString();
 
 	        using (Pushd(buildFilePath, platform))

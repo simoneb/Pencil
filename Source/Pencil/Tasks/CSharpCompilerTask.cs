@@ -19,7 +19,12 @@ namespace Pencil.Tasks
 
 	    public CompilerVersion Version { get; set; }
 
-	    public CSharpCompilerTask(IFileSystem fileSystem, IExecutionEnvironment platform): base(fileSystem, platform)
+        public CSharpCompilerTask()
+        {
+            Version = CompilerVersion.Default;
+        }
+
+        internal CSharpCompilerTask(IFileSystem fileSystem, IExecutionEnvironment platform): base(fileSystem, platform)
 	    {
 	        Version = CompilerVersion.Default;
 	    }

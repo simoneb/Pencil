@@ -6,7 +6,17 @@ namespace Pencil.Tasks
 {
     public class NUnitTask : ExecTaskBase
     {
-        public NUnitTask(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment) : base(fileSystem, executionEnvironment)
+        public NUnitTask()
+        {
+            Init();
+        }
+
+        internal NUnitTask(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment) : base(fileSystem, executionEnvironment)
+        {
+            Init();
+        }
+
+        private void Init()
         {
             NUnitBinPath = new Path(".");
             ShowLogo = true;

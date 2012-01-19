@@ -4,7 +4,11 @@ namespace Pencil.Tasks
 {
     public class MSBuild20Task : MSBuildTask
     {
-        public MSBuild20Task(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
+        public MSBuild20Task()
+        {
+        }
+
+        internal MSBuild20Task(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
         {
         }
 

@@ -12,10 +12,16 @@ namespace Pencil.Tasks
         public FileSet Sources { get { return sources; } }
 		public FileSet References { get { return references; } }
 
-        protected CompilerBaseTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
+        protected CompilerBaseTask()
         {
-            sources = new FileSet(fileSystem);
-		    references = new FileSet(fileSystem);
+            sources = new FileSet(FileSystem);
+            references = new FileSet(FileSystem);
+        }
+
+        internal CompilerBaseTask(IFileSystem fileSystem, IExecutionEnvironment platform) : base(fileSystem, platform)
+        {
+            sources = new FileSet(FileSystem);
+		    references = new FileSet(FileSystem);
         }
 
         public void Compile()

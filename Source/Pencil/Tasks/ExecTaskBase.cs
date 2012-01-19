@@ -11,7 +11,11 @@ namespace Pencil.Tasks
         protected IFileSystem FileSystem { get; private set; }
         protected IExecutionEnvironment Platform { get; private set; }
 
-        protected ExecTaskBase(IFileSystem fileSystem, IExecutionEnvironment platform)
+        protected ExecTaskBase() : this(ProjectContext.FileSystem, ProjectContext.ExecutionEnvironment)
+        {
+        }
+
+        internal ExecTaskBase(IFileSystem fileSystem, IExecutionEnvironment platform)
         {
             FileSystem = fileSystem;
             Platform = platform;
