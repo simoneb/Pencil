@@ -13,7 +13,6 @@ namespace Pencil
 		readonly Dictionary<string, Target> targetsByName;
 		readonly HashSet<string> done = new HashSet<string>();
         readonly ZeptoContainer container = new ZeptoContainer();
-        private ICollection<FutureProject> includes = new List<FutureProject>();
 
         public Project()
         {
@@ -62,8 +61,6 @@ namespace Pencil
 			if(done.Contains(targetName))
 				return;
 
-		    LoadIncludeTargets();
-
 		    var target = targetsByName[targetName];
 		    var realTargetName = target.Name;
 
@@ -75,18 +72,6 @@ namespace Pencil
 				done.Add(targetName);
 			}
 		}
-
-        private void LoadIncludeTargets()
-        {
-            if (includeTargetsLoaded)
-                return;
-
-            foreach (var futureProject in includes)
-                foreach (var t in MethodTargetExtractor.GetTargets(futureProject.Value))
-                    targetsByName.Add(t.Key, t.Value);
-
-            includeTargetsLoaded = true;
-        }
 
         protected virtual void RunCore(Target target)
 		{
@@ -108,34 +93,10 @@ namespace Pencil
         }
 
         private List<string> referencedAssemblies = new List<string>();
-        private bool includeTargetsLoaded;
 
         protected void Call(Action target)
         {
             Run(MethodTarget.GetTargetName(target.Method));
-        }
-
-        protected void Pencil(string buildScript, string target){}
-
-        protected void Include(string file)
-        {
-            if(!File.Exists(file))
-                throw new InvalidOperationException();
-
-            includes.Add(new FutureProject(this, file));
-        }
-
-        protected T Property<T>(string name)
-        {
-            foreach (var futureProject in includes)
-            {
-                var propertyInfo = futureProject.Value.GetType().GetProperty(name, typeof(T));
-        
-                if (propertyInfo != null)
-                    return (T) propertyInfo.GetValue(futureProject.Value, null);
-            }
-
-            return default(T);
         }
 	}
 }

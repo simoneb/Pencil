@@ -29,7 +29,7 @@ namespace Pencil.NUnit
 
         public NUnit()
         {
-            Include("NUnit.Include.cs");
+            //Include("NUnit.Include.cs");
         }
 
         [Description("Displays additional help information")]
@@ -43,17 +43,17 @@ namespace Pencil.NUnit
     Running on the current system, the following runtime frameworks
     are available for building and testing NUnit:");
 
-            foreach (var framework in Property<IEnumerable<string>>("InstalledFrameworks"))
-                Console.WriteLine(framework.PadRight(15, ' ') + GetFrameworkDescription(framework));
+            //foreach (var framework in Property<IEnumerable<string>>("InstalledFrameworks"))
+            //    Console.WriteLine(framework.PadRight(15, ' ') + GetFrameworkDescription(framework));
 
             var defaultNetTarget = "Not Available";
             var defaultMonoTarget = "Not Available";
 
-            if (!string.IsNullOrEmpty(Property<string>("DefaultNetRuntime")))
-                defaultNetTarget = Property<string>("DefaultNetRuntime");
+            //if (!string.IsNullOrEmpty(Property<string>("DefaultNetRuntime")))
+            //    defaultNetTarget = Property<string>("DefaultNetRuntime");
 
-            if (!string.IsNullOrEmpty(Property<string>("DefaultMonoRuntime")))
-                defaultMonoTarget = Property<string>("DefaultMonoRuntime");
+            //if (!string.IsNullOrEmpty(Property<string>("DefaultMonoRuntime")))
+            //    defaultMonoTarget = Property<string>("DefaultMonoRuntime");
 
             Console.WriteLine(@"The default build target is the {0} debug config.
     Generic runtime targets use the following defaults:
@@ -67,7 +67,7 @@ namespace Pencil.NUnit
         nant build-all
         nant debug clean build
 
-    Use   nant -projecthelp to see a full list of targets.", Property<string>("DefaultRuntime"), defaultNetTarget, defaultMonoTarget);
+    Use   nant -projecthelp to see a full list of targets.", /*Property<string>("DefaultRuntime")*/ "", defaultNetTarget, defaultMonoTarget);
         }
 
         private string GetFrameworkDescription(string framework)
@@ -136,7 +136,7 @@ namespace Pencil.NUnit
         [Description("Removes output created by the current build config")]
         public void Clean()
         {
-            var currentBuildDir = FileSystem.GetDirectory(Property<string>("CurrentBuildDir"));
+            var currentBuildDir = FileSystem.GetDirectory(/*Property<string>("CurrentBuildDir")*/ "");
 
             if(currentBuildDir.Exists)
                 currentBuildDir.Delete();
@@ -150,7 +150,7 @@ namespace Pencil.NUnit
         [Description("Removes output created by all build configs")]
         public void CleanAll()
         {
-            var projectBuildDir = FileSystem.GetDirectory(Property<string>("ProjectBuildDir"));
+            var projectBuildDir = FileSystem.GetDirectory("" /*"Property<string>("ProjectBuildDir")*/);
 
             if (projectBuildDir.Exists)
                 projectBuildDir.Delete();
@@ -163,7 +163,7 @@ namespace Pencil.NUnit
 
         public void CleanPackageDir()
         {
-            var packageWorkingDir = FileSystem.GetDirectory(Property<string>("PackageWorkingDir"));
+            var packageWorkingDir = FileSystem.GetDirectory("" /*"Property<string>("PackageWorkingDir")*/);
 
             if (packageWorkingDir.Exists)
                 packageWorkingDir.Delete();
@@ -192,9 +192,9 @@ namespace Pencil.NUnit
         [Description("Generate code for the fluent constraint builder interface")]
         public void GenSyntax()
         {
-            Process.Start(new ProcessStartInfo(Property<string>("ProjectToolsDir") + "/bin/GenSyntax.exe", "SyntaxElements.txt")
+            Process.Start(new ProcessStartInfo(/*Property<string>("ProjectToolsDir") +*/ "/bin/GenSyntax.exe", "SyntaxElements.txt")
                           {
-                              WorkingDirectory = Property<string>("ProjectSrcDir") + "/NUnitFramework/framework"
+                              WorkingDirectory = /*Property<string>("ProjectSrcDir") +*/ "/NUnitFramework/framework"
                           });
         }
 
@@ -203,31 +203,31 @@ namespace Pencil.NUnit
         [Description("Build NUnit for default runtime version and config")]
         public void Build()
         {
-            Console.WriteLine("*");
-            Console.WriteLine("Starting {0} {1} build", Property<string>("RuntimeConfig"), Property<string>("BuildConfig"));
-            Console.WriteLine("*");
+            //Console.WriteLine("*");
+            //Console.WriteLine("Starting {0} {1} build", Property<string>("RuntimeConfig"), Property<string>("BuildConfig"));
+            //Console.WriteLine("*");
 
-            FileSystem.GetFile(Property<string>("ProjectBaseDir") + "/nunit.snk")
-                .CopyTo(FileSystem.GetDirectory(Property<string>("ProjectBuildDir")));
+            //FileSystem.GetFile(Property<string>("ProjectBaseDir") + "/nunit.snk")
+            //    .CopyTo(FileSystem.GetDirectory(Property<string>("ProjectBuildDir")));
 
-            foreach (var f in FileSystem.GetDirectory(Property<string>("ProjectLibDir")).Files("*.dll", SearchScope.CurrentOnly))
-                f.CopyTo(FileSystem.GetDirectory(Property<string>("CurrentLibDir")));
+            //foreach (var f in FileSystem.GetDirectory(Property<string>("ProjectLibDir")).Files("*.dll", SearchScope.CurrentOnly))
+            //    f.CopyTo(FileSystem.GetDirectory(Property<string>("CurrentLibDir")));
 
-            foreach (var f in Property<string[]>("ProjectBuildFiles"))
-                Pencil(f, "Build");
+            //foreach (var f in Property<string[]>("ProjectBuildFiles"))
+            //    Pencil(f, "Build");
 
-            if(Property<bool>("BuildGui"))
-                Call(BuildGui);
+            //if(Property<bool>("BuildGui"))
+            //    Call(BuildGui);
 
 
         }
 
         public void BuildGui()
         {
-            if(!Property<bool>("BuildGui"))
-                throw new InvalidOperationException("Runtime 2.0 or greater is required to build the NUnit GUI");
+            //if(!Property<bool>("BuildGui"))
+            //    throw new InvalidOperationException("Runtime 2.0 or greater is required to build the NUnit GUI");
 
-            Pencil(Property<string>("GuiBuildFiles"), "Build");
+            //Pencil(Property<string>("GuiBuildFiles"), "Build");
         }
     }
 }

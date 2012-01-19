@@ -58,8 +58,6 @@
     <Compile Include="Attributes\DependsOnAttribute.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="CompilerVersion.cs" />
-    <Compile Include="Future.cs" />
-    <Compile Include="FutureProject.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IProjectCompiler.cs" />
     <Compile Include="PencilOptionsParser.cs" />
